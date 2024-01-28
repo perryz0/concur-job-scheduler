@@ -1,0 +1,7 @@
+This is a simple text
+And it should have three paragraphs
+
+This is the second paragraph
+
+I am the third paragraph
+All three paragraphs are free of typos
