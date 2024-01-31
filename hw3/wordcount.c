@@ -39,7 +39,7 @@ void printTotLines(int lineTotal, int lineBoolean, int wordBoolean, int charBool
 int main(int argc, char* argv[]) {
     
     // Handles error of no input files passed as argument.
-    if (argc < 2 || (argc == 2 && argv[1][0] == '-')) {
+    if (argc < 2 || (argc == 2 && argv[1][0] == '-' && (argv[1][1] == 'l' || argv[1][1] == 'w' || argv[1][1] == 'c'))) {
         fprintf(stderr, "Usage: ./wordcount requires an input file.\n");
         return EXIT_FAILURE;
     }
@@ -50,17 +50,16 @@ int main(int argc, char* argv[]) {
     // Options tracker (i.e. decides which values out of the three to print)
     int lineBoolean = 1, wordBoolean = 1, charBoolean = 1;
 
-    // Procesis all options/flags
+    // Process all options/flags
     for (int i = 1; i < argc; i++) {
-        if (argv[1][0] == '-' && strlen(argv[1]) == 2) {
-            if (argv[1][1] == 'l') {
-                wordBoolean = 0, charBoolean = 0;
-            } else if (argv[1][1] == 'w') {
-                lineBoolean = 0, charBoolean = 0;
-            } else if (argv[1][1] == 'c') {
-                lineBoolean = 0, wordBoolean = 0;
-            }
+        if (i == 1 && strncmp((argv[i]), "-l", 3) == 0) {
+            wordBoolean = 0, charBoolean = 0;
+        } else if (i == 1 && strncmp((argv[i]), "-w", 3) == 0) {
+            lineBoolean = 0, charBoolean = 0;
+        } else if (i == 1 && strncmp((argv[i]), "-c", 3) == 0) {
+            lineBoolean = 0, wordBoolean = 0;
         } else {
+
             // Process each individual file passed as argument
             fileProcessor(argv[i], &lineTotal, lineBoolean, wordBoolean, charBoolean);
         }
@@ -76,12 +75,13 @@ int main(int argc, char* argv[]) {
 
 void fileProcessor(char* filename, int *lineTotal, int lineBoolean, int wordBoolean, int charBoolean) {
     FILE *currFile = fopen(filename, "r");
+    int lines = 0, words = 0, chars = 0;
+
     if (currFile == NULL) {
         fprintf(stderr, "%s will not open. Skipping.\n", filename);
         return;
     }
 
-    int lines = 0, words = 0, chars = 0;
     char arr[MAXLINE];
 
     while (fgets(arr, MAXLINE, currFile) != NULL) {
