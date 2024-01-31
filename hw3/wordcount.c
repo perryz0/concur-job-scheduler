@@ -6,6 +6,10 @@
 */
 
 // TODO: Includes for functions & types defined elsewhere.
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+#include <stdlib.h>
 
 // TODO: Defines for symbolic constants (if any).
 #define MAXLINE 500
