@@ -48,17 +48,17 @@ int main(int argc, char* argv[]) {
     int lineTotal = 0;
 
     // Options tracker (i.e. decides which values out of the three to print)
-    int lineBoolean = 0, wordBoolean = 0, charBoolean = 0;
+    int lineBoolean = 1, wordBoolean = 1, charBoolean = 1;
 
     // Procesis all options/flags
     for (int i = 1; i < argc; i++) {
         if (argv[i][0] == '-') {
             if (argv[i][1] == 'l') {
-                lineBoolean = 1;
+                wordBoolean = 0, charBoolean = 0;
             } else if (argv[i][1] == 'w') {
-                wordBoolean = 1;
+                lineBoolean = 0, charBoolean = 0;
             } else if (argv[i][1] == 'c') {
-                charBoolean = 1;
+                lineBoolean = 0, wordBoolean = 0;
             }
         } else {
             // Process each individual file passed as argument
@@ -120,7 +120,7 @@ void fileProcessor(char* filename, int *lineTotal, int lineBoolean, int wordBool
 
 void printTotLines(int lineTotal, int lineBoolean, int wordBoolean, int charBoolean) {
     if (!(lineBoolean || wordBoolean || charBoolean)) {
-        printf("Total lines = %d\n", lineTotal);
+        printf("Total Lines = %d\n", lineTotal);
     }
 }
 
