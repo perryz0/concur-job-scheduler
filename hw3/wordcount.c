@@ -2,7 +2,15 @@
 // Date: 1/28/24
 // CSE 374 Homework 3: Wordcount
 /*
-    TODO: Include basic information.
+    This is a program that simulates the unix command "wc". It reads in one or
+    more files and report statistics (i.e. number of lines, words, and chars)
+    for the file(s). When an option is flagged (e.g. "-l") and indicated as
+    the 2nd argument, only the specified statistic (i.e. lines) is printed.
+    Otherwise, if no option is specified, all three statistics will be shown
+    and labeled next to each of the listed file names, alongside an additional
+    total line count for all of the files. Unless the passed arguments are
+    invalid (i.e. incorrect usage of the program), counts will be provided,
+    even if none of the files exist (i.e. total lines = 0).
 */
 
 #include <stdio.h>
@@ -72,10 +80,13 @@ int main(int argc, char* argv[]) {
         fprintf(stderr, "Usage: ./wordcount requires an input file.\n");
         return EXIT_FAILURE;
     }
+
     // Tracks total number of lines
     int lineTotal = 0;
+
     // Options tracker (i.e. decides which values out of the three to print)
     int lineBoolean = 1, wordBoolean = 1, charBoolean = 1;
+
     // Process all options/flags
     for (int i = 1; i < argc; i++) {
         if (i == 1 && strncmp((argv[i]), "-l", 3) == 0) {
@@ -90,6 +101,7 @@ int main(int argc, char* argv[]) {
                                                                 charBoolean);
         }
     }
+
     // Checker and printer for total lines
     totalLines(lineTotal, lineBoolean, wordBoolean, charBoolean);
 
