@@ -5,15 +5,16 @@
     TODO: Include basic information.
 */
 
-// TODO: Includes for functions & types defined elsewhere.
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 
-// TODO: Defines for symbolic constants (if any).
+// Max compatible line length of input file
 #define MAXLINE 500
 
-// TODO: Function declarations/prototypes (with appropriate comments).
+
+
+// FUNCTION DECLARATIONS (with comments)
 
 // Processes a single input file and calculates the number of lines, words, and
 // characters based on the specified option (i.e. -l, -w, and -c respectively).
@@ -33,13 +34,19 @@ void fileProcessor(char* filename, int *lineTotal, int lineBoolean,
 //   - lineBoolean: Boolean that indicates whether to print # of lines.
 //   - wordBoolean: Boolean that indicates whether to print # of words.
 //   - charBoolean: Boolean that indicates whether to print # of characters.
-void printTotLines(int lineTotal, int lineBoolean, int wordBoolean, int charBoolean);
+void totalLines(int lineTotal, int lineBoolean, int wordBoolean,
+                                                        int charBoolean);
 
-// TODO: Function definitions.
+
+
+// FUNCION DEFINITIONS
+
 int main(int argc, char* argv[]) {
     
     // Handles error of no input files passed as argument.
-    if (argc < 2 || (argc == 2 && argv[1][0] == '-' && strlen(argv[1]) == 2 && (argv[1][1] == 'l' || argv[1][1] == 'w' || argv[1][1] == 'c'))) {
+    if (argc < 2 || (argc == 2 && argv[1][0] == '-' && strlen(argv[1]) == 2
+         && (argv[1][1] == 'l' || argv[1][1] == 'w' || argv[1][1] == 'c'))) {
+
         fprintf(stderr, "Usage: ./wordcount requires an input file.\n");
         return EXIT_FAILURE;
     }
@@ -61,19 +68,24 @@ int main(int argc, char* argv[]) {
         } else {
 
             // Process each individual file passed as argument
-            fileProcessor(argv[i], &lineTotal, lineBoolean, wordBoolean, charBoolean);
+            fileProcessor(argv[i], &lineTotal, lineBoolean, wordBoolean,
+                                                                charBoolean);
         }
     }
 
-    // Options checker, if no option chosen, total lines will also be printed
-    printTotLines(lineTotal, lineBoolean, wordBoolean, charBoolean);
+    // Checker and printer for total lines
+    totalLines(lineTotal, lineBoolean, wordBoolean, charBoolean);
 
     return EXIT_SUCCESS;
 }
 
+
+
 /* Non-main helper functions; all descriptions above in the declarations. */
 
-void fileProcessor(char* filename, int *lineTotal, int lineBoolean, int wordBoolean, int charBoolean) {
+void fileProcessor(char* filename, int *lineTotal, int lineBoolean,
+                                            int wordBoolean, int charBoolean) {
+
     FILE *currFile = fopen(filename, "r");
     int lines = 0, words = 0, chars = 0;
 
@@ -124,10 +136,9 @@ void fileProcessor(char* filename, int *lineTotal, int lineBoolean, int wordBool
     *lineTotal += lines;
 }
 
-void printTotLines(int lineTotal, int lineBoolean, int wordBoolean, int charBoolean) {
+void totalLines(int lineTotal, int lineBoolean, int wordBoolean,
+                                                    int charBoolean) {
     if (lineBoolean && wordBoolean && charBoolean) {
         printf("Total Lines = %d\n", lineTotal);
     }
 }
-
-// TODO: Remove all TODO comments (like this one) once you are done!
