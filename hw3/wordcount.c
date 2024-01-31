@@ -27,7 +27,34 @@ void fileProcessor();
 
 // TODO: Function definitions.
 int main(int argc, char* argv[]) {
+    fileError(argc);
     
+    // Tracks total number of lines
+    int lineTotal = 0;
+
+    // Options tracker (i.e. decides which values out of the three to print)
+    int lineBoolean = 0; wordBoolean = 0, charBoolean = 0;
+
+    // Processing all options/flags
+    for (int i = 1; i < argc; i++) {
+        if (argv[i][0] == '-') {
+            if (argv[i][1] == 'l') {
+                lineBoolean = 1;
+            } else if (argv[i][1] == 'w') {
+                wordBoolean = 1;
+            } else if (argv[i][1] == 'c') {
+                charBoolean = 1;
+            }
+        } else {
+            // Process each individual file passed as argument
+            fileProcessor(argv[i], &lineTotal, lineBoolean, wordBoolean, charBoolean);
+        }
+    }
+
+    // Options checker, if no option chosen, total lines will also be printed
+    printTotal(lineTotal, lineBoolean, wordBoolean, charBoolean);
+
+    return EXIT_SUCCESS;
 }
 
 void fileError(int argc) {
