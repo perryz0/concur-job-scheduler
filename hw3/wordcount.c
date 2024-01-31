@@ -5,6 +5,7 @@
 // TODO: Includes for functions & types defined elsewhere.
 
 // TODO: Defines for symbolic constants (if any).
+#define MAXLINE 500
 
 // TODO: Function declarations/prototypes (with appropriate comments).
 
