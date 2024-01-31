@@ -87,14 +87,16 @@ void fileProcessor(char* filename, int *lineTotal, int lineBoolean, int wordBool
     while (fgets(arr, MAXLINE, currFile) != NULL) {
         lines++;
         
+        if (charBoolean) {
+            chars += strlen(arr);
+        }
+
         if (wordBoolean) {
             char *token = strtok(arr, " \n");
             while (token != NULL) {
                 words++;
                 token = strtok(NULL, " \n");
             }
-        } else if (charBoolean) {
-            chars += strlen(arr);
         }
     }
 
@@ -102,16 +104,20 @@ void fileProcessor(char* filename, int *lineTotal, int lineBoolean, int wordBool
     fclose(currFile);
 
     // Print the desired values based on options
-    if (lineBoolean) {
-        printf("%d\n", lines);
-    }
+    if (lineBoolean && wordBoolean && charBoolean) {
+        printf("%d %d %d %s\n", lines, words, chars, filename);
+    } else {
+        if (lineBoolean) {
+            printf("%d\n", lines);
+        }
 
-    if (wordBoolean) {
-        printf("%d\n", words);
-    }
+        if (wordBoolean) {
+            printf("%d\n", words);
+        }
 
-    if (charBoolean) {
-        printf("%d\n", chars);
+        if (charBoolean) {
+            printf("%d\n", chars);
+        }
     }
 
     // Update total line value across all files
@@ -119,7 +125,7 @@ void fileProcessor(char* filename, int *lineTotal, int lineBoolean, int wordBool
 }
 
 void printTotLines(int lineTotal, int lineBoolean, int wordBoolean, int charBoolean) {
-    if (!(lineBoolean || wordBoolean || charBoolean)) {
+    if (lineBoolean && wordBoolean && charBoolean) {
         printf("Total Lines = %d\n", lineTotal);
     }
 }
