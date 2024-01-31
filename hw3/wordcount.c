@@ -39,6 +39,19 @@ void fileProcessor(char* filename, int *lineTotal, int lineBoolean,
 void processHelper(FILE *currFile, int wordBoolean, int charBoolean,
                                         int *lines, int *words, int *chars);
 
+// Helps with printing the counted line, word, and char values based on the
+// specified options.
+// Parameters:
+//   - filename: Name of current input file to be processed.
+//   - lineBoolean: Boolean that indicates whether to print # of lines.
+//   - wordBoolean: Boolean that indicates whether to print # of words.
+//   - charBoolean: Boolean that indicates whether to print # of characters.
+//   - lines: # of lines in current file.
+//   - words: # of words in current file.
+//   - chars: # of lines in current file.
+void printHelper(char* filename, int lineBoolean, int wordBoolean,
+                            int charBoolean, int lines, int words, int chars);
+
 // Prints the total number of lines for all files.
 // Parameters:
 //   - lineTotal: Total # of lines across files.
@@ -106,21 +119,8 @@ void fileProcessor(char* filename, int *lineTotal, int lineBoolean,
     fclose(currFile);
 
     // Print the desired values based on options
-    if (lineBoolean && wordBoolean && charBoolean) {
-        printf("%d %d %d %s\n", lines, words, chars, filename);
-    } else {
-        if (lineBoolean) {
-            printf("%d\n", lines);
-        }
-
-        if (wordBoolean) {
-            printf("%d\n", words);
-        }
-
-        if (charBoolean) {
-            printf("%d\n", chars);
-        }
-    }
+    printHelper(filename, lineBoolean, wordBoolean, charBoolean, lines,
+                                                                words, chars);
 
     // Update total line value across all files
     *lineTotal += lines;
@@ -140,6 +140,25 @@ void processHelper(FILE *currFile, int wordBoolean, int charBoolean,
                 (*words)++;
                 token = strtok(NULL, " \n");
             }
+        }
+    }
+}
+
+void printHelper(char* filename, int lineBoolean, int wordBoolean,
+                        int charBoolean, int lines, int words, int chars) {
+    if (lineBoolean && wordBoolean && charBoolean) {
+        printf("%d %d %d %s\n", lines, words, chars, filename);
+    } else {
+        if (lineBoolean) {
+            printf("%d\n", lines);
+        }
+
+        if (wordBoolean) {
+            printf("%d\n", words);
+        }
+
+        if (charBoolean) {
+            printf("%d\n", chars);
         }
     }
 }
