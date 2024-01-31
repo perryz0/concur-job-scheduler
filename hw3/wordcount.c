@@ -52,12 +52,12 @@ int main(int argc, char* argv[]) {
 
     // Procesis all options/flags
     for (int i = 1; i < argc; i++) {
-        if (argv[i][0] == '-') {
-            if (argv[i][1] == 'l') {
+        if (argv[1][0] == '-' && strlen(argv[1]) == 2) {
+            if (argv[1][1] == 'l') {
                 wordBoolean = 0, charBoolean = 0;
-            } else if (argv[i][1] == 'w') {
+            } else if (argv[1][1] == 'w') {
                 lineBoolean = 0, charBoolean = 0;
-            } else if (argv[i][1] == 'c') {
+            } else if (argv[1][1] == 'c') {
                 lineBoolean = 0, wordBoolean = 0;
             }
         } else {
