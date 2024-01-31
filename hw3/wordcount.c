@@ -39,7 +39,7 @@ void printTotLines(int lineTotal, int lineBoolean, int wordBoolean, int charBool
 int main(int argc, char* argv[]) {
     
     // Handles error of no input files passed as argument.
-    if (argc < 2) {
+    if (argc < 2 || (argc == 2 && argv[1][0] == '-')) {
         printf("Usage: ./wordcount requires an input file.\n");
         return EXIT_FAILURE;
     }
