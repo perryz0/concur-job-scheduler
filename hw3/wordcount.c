@@ -35,7 +35,7 @@ int main(int argc, char* argv[]) {
     // Options tracker (i.e. decides which values out of the three to print)
     int lineBoolean = 0; wordBoolean = 0, charBoolean = 0;
 
-    // Processing all options/flags
+    // Procesis all options/flags
     for (int i = 1; i < argc; i++) {
         if (argv[i][0] == '-') {
             if (argv[i][1] == 'l') {
@@ -57,6 +57,8 @@ int main(int argc, char* argv[]) {
     return EXIT_SUCCESS;
 }
 
+// Non-main helper functions; all descriptions above in the declarations.
+
 void fileError(int argc) {
     if (argc < 2) {
         printf("Usage: ./wordcount requires an input file.\n");
@@ -66,6 +68,12 @@ void fileError(int argc) {
 
 void fileProcessor() {
 
+}
+
+void printTotal(int lineTotal, int lineBoolean, int wordBoolean, int charBoolean) {
+    if (!(lineBoolean || wordBoolean || charBoolean)) {
+        printf("Total lines = %d\n", lineTotal);
+    }
 }
 
 // TODO: Remove all TODO comments (like this one) once you are done!
