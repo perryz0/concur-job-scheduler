@@ -28,6 +28,17 @@
 void fileProcessor(char* filename, int *lineTotal, int lineBoolean,
                                             int wordBoolean, int charBoolean);
 
+// Helps with file processing by iterating through each line and count values.
+// Parameters:
+//   - currFile: Pointer to the input file
+//   - wordBoolean: Boolean that indicates whether to print # of words.
+//   - charBoolean: Boolean that indicates whether to print # of characters.
+//   - lines: Pointer to variable that stores # of lines in current file
+//   - words: Pointer to variable that stores # of words in current file
+//   - chars: Pointer to variable that stores # of lines in current file
+void processHelper(FILE *currFile, int wordBoolean, int charBoolean,
+                                        int *lines, int *words, int *chars);
+
 // Prints the total number of lines for all files.
 // Parameters:
 //   - lineTotal: Total # of lines across files.
@@ -42,21 +53,16 @@ void totalLines(int lineTotal, int lineBoolean, int wordBoolean,
 // FUNCION DEFINITIONS
 
 int main(int argc, char* argv[]) {
-    
     // Handles error of no input files passed as argument.
     if (argc < 2 || (argc == 2 && argv[1][0] == '-' && strlen(argv[1]) == 2
          && (argv[1][1] == 'l' || argv[1][1] == 'w' || argv[1][1] == 'c'))) {
-
         fprintf(stderr, "Usage: ./wordcount requires an input file.\n");
         return EXIT_FAILURE;
     }
-    
     // Tracks total number of lines
     int lineTotal = 0;
-
     // Options tracker (i.e. decides which values out of the three to print)
     int lineBoolean = 1, wordBoolean = 1, charBoolean = 1;
-
     // Process all options/flags
     for (int i = 1; i < argc; i++) {
         if (i == 1 && strncmp((argv[i]), "-l", 3) == 0) {
@@ -66,13 +72,11 @@ int main(int argc, char* argv[]) {
         } else if (i == 1 && strncmp((argv[i]), "-c", 3) == 0) {
             lineBoolean = 0, wordBoolean = 0;
         } else {
-
             // Process each individual file passed as argument
             fileProcessor(argv[i], &lineTotal, lineBoolean, wordBoolean,
                                                                 charBoolean);
         }
     }
-
     // Checker and printer for total lines
     totalLines(lineTotal, lineBoolean, wordBoolean, charBoolean);
 
@@ -85,32 +89,18 @@ int main(int argc, char* argv[]) {
 
 void fileProcessor(char* filename, int *lineTotal, int lineBoolean,
                                             int wordBoolean, int charBoolean) {
-
+    // Opens current file in read mode and initializes counters
     FILE *currFile = fopen(filename, "r");
     int lines = 0, words = 0, chars = 0;
 
+    // Checks whether file failed to open
     if (currFile == NULL) {
         fprintf(stderr, "%s will not open. Skipping.\n", filename);
         return;
     }
 
-    char arr[MAXLINE];
-
-    while (fgets(arr, MAXLINE, currFile) != NULL) {
-        lines++;
-        
-        if (charBoolean) {
-            chars += strlen(arr);
-        }
-
-        if (wordBoolean) {
-            char *token = strtok(arr, " \n");
-            while (token != NULL) {
-                words++;
-                token = strtok(NULL, " \n");
-            }
-        }
-    }
+    // Iterate through each line and performs counting
+    processHelper(currFile, wordBoolean, charBoolean, &lines, &words, &chars);
 
     // Closes current file stream
     fclose(currFile);
@@ -134,6 +124,24 @@ void fileProcessor(char* filename, int *lineTotal, int lineBoolean,
 
     // Update total line value across all files
     *lineTotal += lines;
+}
+
+void processHelper(FILE *currFile, int wordBoolean, int charBoolean,
+                                        int *lines, int *words, int *chars) {
+    char arr[MAXLINE];
+    while (fgets(arr, MAXLINE, currFile) != NULL) {
+        (*lines)++;
+        if (charBoolean) {
+            (*chars) += strlen(arr);
+        }
+        if (wordBoolean) {
+            char *token = strtok(arr, " \n");
+            while (token != NULL) {
+                (*words)++;
+                token = strtok(NULL, " \n");
+            }
+        }
+    }
 }
 
 void totalLines(int lineTotal, int lineBoolean, int wordBoolean,
