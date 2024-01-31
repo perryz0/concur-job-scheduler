@@ -15,8 +15,10 @@
 #define MAXLINE 500
 
 // TODO: Function declarations/prototypes (with appropriate comments).
-// Handles error of no input files passed as argument
-void fileError();
+// Handles error of no input files passed as argument.
+// Parameters:
+//   - argc: number of arguments passed
+void fileError(int argc);
 
 // Processes a single input file and calculates the number of lines, words, and
 // characters based on the specified option (i.e. -l, -w, and -c respectively).
@@ -24,9 +26,18 @@ void fileError();
 void fileProcessor();
 
 // TODO: Function definitions.
-int main(int argc, char* argv[]) {}
+int main(int argc, char* argv[]) {
+    
+}
 
-void fileError() {
+void fileError(int argc) {
+    if (argc < 2) {
+        printf("Usage: ./wordcount requires an input file.\n");
+        return EXIT_FAILURE;
+    }
+}
+
+void fileProcessor() {
 
 }
 
