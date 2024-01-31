@@ -8,17 +8,12 @@
 // TODO: Includes for functions & types defined elsewhere.
 #include <stdio.h>
 #include <string.h>
-#include <ctype.h>
 #include <stdlib.h>
 
 // TODO: Defines for symbolic constants (if any).
 #define MAXLINE 500
 
 // TODO: Function declarations/prototypes (with appropriate comments).
-// Handles error of no input files passed as argument.
-// Parameters:
-//   - argc: number of arguments passed
-void fileError(int argc);
 
 // Processes a single input file and calculates the number of lines, words, and
 // characters based on the specified option (i.e. -l, -w, and -c respectively).
@@ -42,13 +37,18 @@ void printTotLines(int lineTotal, int lineBoolean, int wordBoolean, int charBool
 
 // TODO: Function definitions.
 int main(int argc, char* argv[]) {
-    fileError(argc);
+    
+    // Handles error of no input files passed as argument.
+    if (argc < 2) {
+        printf("Usage: ./wordcount requires an input file.\n");
+        return EXIT_FAILURE;
+    }
     
     // Tracks total number of lines
     int lineTotal = 0;
 
     // Options tracker (i.e. decides which values out of the three to print)
-    int lineBoolean = 0; wordBoolean = 0, charBoolean = 0;
+    int lineBoolean = 0, wordBoolean = 0, charBoolean = 0;
 
     // Procesis all options/flags
     for (int i = 1; i < argc; i++) {
@@ -72,17 +72,50 @@ int main(int argc, char* argv[]) {
     return EXIT_SUCCESS;
 }
 
-// Non-main helper functions; all descriptions above in the declarations.
+/* Non-main helper functions; all descriptions above in the declarations. */
 
-void fileError(int argc) {
-    if (argc < 2) {
-        printf("Usage: ./wordcount requires an input file.\n");
-        return EXIT_FAILURE;
+void fileProcessor(char* filename, int *lineTotal, int lineBoolean, int wordBoolean, int charBoolean) {
+    FILE *currFile = fopen(filename, "r");
+    if (currFile == NULL) {
+        printf("%s will not open. Skipped.\n", filename);
+        return;
     }
-}
 
-void fileProcessor() {
+    int lines = 0, words = 0, chars = 0;
+    char arr[MAXLINE];
 
+    while (fgets(arr, MAXLINE, currFile) != NULL) {
+        lines++;
+        
+        if (wordBoolean) {
+            char *token = strtok(arr, " \n");
+            while (token != NULL) {
+                words++;
+                token = strtok(NULL, " \n");
+            }
+        } else if (charBoolean) {
+            chars += strlen(arr);
+        }
+    }
+
+    // Closes current file stream
+    fclose(currFile);
+
+    // Print the desired values based on options
+    if (lineBoolean) {
+        printf("%d\n", lines);
+    }
+
+    if (wordBoolean) {
+        printf("%d\n", words);
+    }
+
+    if (charBoolean) {
+        printf("%d\n", chars);
+    }
+
+    // Update total line value across all files
+    *lineTotal += lines;
 }
 
 void printTotLines(int lineTotal, int lineBoolean, int wordBoolean, int charBoolean) {
