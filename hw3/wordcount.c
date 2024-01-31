@@ -23,7 +23,22 @@ void fileError(int argc);
 // Processes a single input file and calculates the number of lines, words, and
 // characters based on the specified option (i.e. -l, -w, and -c respectively).
 // If no option is specified, the total number of lines are printed.
-void fileProcessor();
+// Parameters:
+//   - filename: Name of current input file to be processed.
+//   - lineTotal: Pointer to the tracker for total # of lines across files.
+//   - lineBoolean: Boolean that indicates whether to print # of lines.
+//   - wordBoolean: Boolean that indicates whether to print # of words.
+//   - charBoolean: Boolean that indicates whether to print # of characters.
+void fileProcessor(char* filename, int *lineTotal, int lineBoolean,
+                                            int wordBoolean, int charBoolean);
+
+// Prints the total number of lines for all files.
+// Parameters:
+//   - lineTotal: Total # of lines across files.
+//   - lineBoolean: Boolean that indicates whether to print # of lines.
+//   - wordBoolean: Boolean that indicates whether to print # of words.
+//   - charBoolean: Boolean that indicates whether to print # of characters.
+void printTotLines(int lineTotal, int lineBoolean, int wordBoolean, int charBoolean);
 
 // TODO: Function definitions.
 int main(int argc, char* argv[]) {
@@ -52,7 +67,7 @@ int main(int argc, char* argv[]) {
     }
 
     // Options checker, if no option chosen, total lines will also be printed
-    printTotal(lineTotal, lineBoolean, wordBoolean, charBoolean);
+    printTotLines(lineTotal, lineBoolean, wordBoolean, charBoolean);
 
     return EXIT_SUCCESS;
 }
@@ -70,7 +85,7 @@ void fileProcessor() {
 
 }
 
-void printTotal(int lineTotal, int lineBoolean, int wordBoolean, int charBoolean) {
+void printTotLines(int lineTotal, int lineBoolean, int wordBoolean, int charBoolean) {
     if (!(lineBoolean || wordBoolean || charBoolean)) {
         printf("Total lines = %d\n", lineTotal);
     }
