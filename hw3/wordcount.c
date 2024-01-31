@@ -77,7 +77,7 @@ int main(int argc, char* argv[]) {
 void fileProcessor(char* filename, int *lineTotal, int lineBoolean, int wordBoolean, int charBoolean) {
     FILE *currFile = fopen(filename, "r");
     if (currFile == NULL) {
-        printf("%s will not open. Skipping.\n", filename);
+        fprintf(stderr, "%s will not open. Skipping.\n", filename);
         return;
     }
 
