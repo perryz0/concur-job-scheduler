@@ -1,0 +1,5 @@
+# Ignore OS X finder info files
+.DS_Store
+
+# Ignore built object files
+*.o
