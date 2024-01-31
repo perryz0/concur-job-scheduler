@@ -40,7 +40,7 @@ int main(int argc, char* argv[]) {
     
     // Handles error of no input files passed as argument.
     if (argc < 2 || (argc == 2 && argv[1][0] == '-')) {
-        printf("Usage: %s requires an input file.\n", argv[0]);
+        fprintf(stderr, "Usage: ./wordcount requires an input file.\n");
         return EXIT_FAILURE;
     }
     
