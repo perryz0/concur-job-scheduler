@@ -3,3 +3,4 @@
 
 # Ignore built object files
 *.o
+!hw5/t9_lib.o
