@@ -24,6 +24,7 @@ size_t build_dictionary(char* filename, Dictionary* dict_result) {
   // open the file for reading
   FILE* input = fopen(filename, "r");
   if (!input) {
+    fclose(input); // *free input file
     return 0;
   }
 

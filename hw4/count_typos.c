@@ -40,7 +40,7 @@ void show_results(FILE* stream,
 
 int main(int argc, char* argv[]) {
   // *fix to initialize variables to some default value
-  Dictionary dict;
+  Dictionary dict = NULL;
   size_t dict_size = 0;
   char buf[MAX_WORD_LENGTH] = "";  // buffer for processing words
 
@@ -92,7 +92,6 @@ int main(int argc, char* argv[]) {
     
     // *free memory that was allocated for typos output and missing int return
     free(typos_filename);
-    return EXIT_FAILURE;
   }
 
   // build the dictionary
