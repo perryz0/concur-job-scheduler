@@ -19,7 +19,11 @@
 //    after the original filename.
 //
 
-// TODO: Import libraries needed to compile
+// Imported libraries to address compile-time errors
+#include <stdio.h>
+#include <stddef.h>
+#include <stdlib.h>
+#include <string.h>
 
 #define TYPOS_SUFFIX ".typos"
 #define MAX_WORD_LENGTH 128
