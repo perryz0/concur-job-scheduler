@@ -39,9 +39,9 @@ void show_results(FILE* stream,
                   int word_count, int paragraph_count, int typo_count);
 
 int main(int argc, char* argv[]) {
-  Dictionary dict;
-  size_t dict_size;
-  char buf[MAX_WORD_LENGTH];  // buffer for processing words
+  Dictionary dict = NULL;
+  size_t dict_size = 0;
+  char buf[MAX_WORD_LENGTH] = "";  // buffer for processing words
 
   // statistics variables
   int paragraph_count, word_count, typo_count;
@@ -123,6 +123,18 @@ int main(int argc, char* argv[]) {
 
 
   // TODO: Free all allocated resources.
+  fclose(text);
+  free_dictionary(dict, dict_size);
+
+  if (stats_output != stdout) {
+      fclose(stats_output);
+  }
+
+  if (typos_output) {
+      fclose(typos_output);
+  }
+
+  free(typos_filename);
 
   return EXIT_SUCCESS;
 }
