@@ -40,7 +40,7 @@ void show_results(FILE* stream,
 
 int main(int argc, char* argv[]) {
   // *fix to initialize variables to some default value
-  Dictionary dict = NULL;
+  Dictionary dict;
   size_t dict_size = 0;
   char buf[MAX_WORD_LENGTH] = "";  // buffer for processing words
 
@@ -106,6 +106,11 @@ int main(int argc, char* argv[]) {
     fclose(stats_output);
     free(typos_filename);
     fclose(typos_output);
+
+    // *check dictionary free if it is allocated or not
+    if (dict != NULL) {
+        free_dictionary(dict, dict_size);
+    }
     return EXIT_FAILURE;
   }
 
