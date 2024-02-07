@@ -13,7 +13,9 @@
 size_t build_dictionary(char* filename, Dictionary* dict_result) {
   // allocate space for the dictionary
   size_t dict_size = DEFAULT_DICT_SIZE;
-  Dictionary dict = (Dictionary) malloc(dict_size);
+
+  // *fix on incorrect cast length
+  Dictionary dict = (Dictionary) malloc(sizeof(char*) * dict_size);
 
   // create a buffer to store the lines
   char* buffer = (char*) malloc(MAX_WORD_SIZE);
@@ -39,10 +41,10 @@ size_t build_dictionary(char* filename, Dictionary* dict_result) {
     // double the dictionary size if it's full
     if (word_count == dict_size) {
       dict_size *= 2;
-      dict = (Dictionary) realloc(dict, dict_size * 2);
+      dict = (Dictionary) realloc(dict, sizeof(char*) * dict_size);
     }
     // save the word in a new allocated space and put it into the dictionary
-    word = malloc(sizeof(char) * word_len);
+    word = malloc(sizeof(char) * word_len + 1);
     strncpy(word, buffer, word_len + 1);
     dict[word_count] = word;
 
