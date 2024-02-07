@@ -39,6 +39,7 @@ void show_results(FILE* stream,
                   int word_count, int paragraph_count, int typo_count);
 
 int main(int argc, char* argv[]) {
+  // *fix to initialize variables to some default value
   Dictionary dict = NULL;
   size_t dict_size = 0;
   char buf[MAX_WORD_LENGTH] = "";  // buffer for processing words
@@ -79,12 +80,19 @@ int main(int argc, char* argv[]) {
   // create the file for typos output, its name should be the input with the
   // ".typos" suffix appended
   FILE* typos_output = NULL;
-  char* typos_filename = (char*) malloc(strlen(input_filename));
+
+  // *fix here to consider .typos extension and the null terminator
+  char* typos_filename = (char*) malloc(strlen(input_filename)
+                                                 + strlen(TYPOS_SUFFIX) + 1);
   strcpy(typos_filename, input_filename);
   strcat(typos_filename, TYPOS_SUFFIX);
   typos_output = fopen(typos_filename, "w");
   if (!typos_output) {
     fprintf(stderr, "Failed to create %s for typos output.\n", typos_filename);
+    
+    // *free memory that was allocated for typos output and missing int return
+    free(typos_filename);
+    return EXIT_FAILURE;
   }
 
   // build the dictionary
@@ -92,6 +100,12 @@ int main(int argc, char* argv[]) {
   dict_size = build_dictionary(dict_filename, &dict);
   if (!dict_size) {
     fprintf(stderr, "Failed to build a dictionary from %s.\n", dict_filename);
+
+    // *free a number of pointers and local variables
+    fclose(text);
+    fclose(stats_output);
+    free(typos_filename);
+    fclose(typos_output);
     return EXIT_FAILURE;
   }
 
@@ -125,16 +139,9 @@ int main(int argc, char* argv[]) {
   // TODO: Free all allocated resources.
   fclose(text);
   free_dictionary(dict, dict_size);
-
-  if (stats_output != stdout) {
-      fclose(stats_output);
-  }
-
-  if (typos_output) {
-      fclose(typos_output);
-  }
-
+  fclose(stats_output);
   free(typos_filename);
+  fclose(typos_output);
 
   return EXIT_SUCCESS;
 }
