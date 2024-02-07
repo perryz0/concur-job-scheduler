@@ -1,4 +1,11 @@
-// TODO: Import libraries needed to compile.
+// Imported libraries to address compile-time errors
+#include <stdio.h>
+#include <stddef.h>
+#include <stdlib.h>
+#include <string.h>
+
+// Double-quotes for user-defined files
+#include "SpellChecker.h"
 
 #define MAX_WORD_SIZE 128
 #define DEFAULT_DICT_SIZE (1 << 16)  // same as 2^16, an arbitrary starting size

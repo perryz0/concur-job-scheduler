@@ -25,6 +25,9 @@
 #include <stdlib.h>
 #include <string.h>
 
+// Double-quotes for user-defined files
+#include "SpellChecker.h"
+
 #define TYPOS_SUFFIX ".typos"
 #define MAX_WORD_LENGTH 128
 
