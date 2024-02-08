@@ -100,7 +100,7 @@ int main(int argc, char* argv[]) {
   if (!dict_size) {
     fprintf(stderr, "Failed to build a dictionary from %s.\n", dict_filename);
 
-    // *free a number of pointers and local variables
+    // *free pointers and local variables
     fclose(text);
     fclose(stats_output);
     free(typos_filename);

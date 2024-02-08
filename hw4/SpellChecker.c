@@ -16,6 +16,9 @@ size_t build_dictionary(char* filename, Dictionary* dict_result) {
 
   // *fix on incorrect cast length
   Dictionary dict = (Dictionary) malloc(sizeof(char*) * dict_size);
+  if (!dict) {
+      return 0; // *possible fix
+  }
 
   // create a buffer to store the lines
   char* buffer = (char*) malloc(MAX_WORD_SIZE);
@@ -25,6 +28,7 @@ size_t build_dictionary(char* filename, Dictionary* dict_result) {
   FILE* input = fopen(filename, "r");
   if (!input) {
     fclose(input); // *free input file
+    free(dict); // *free dict if unused
     return 0;
   }
 
@@ -43,9 +47,21 @@ size_t build_dictionary(char* filename, Dictionary* dict_result) {
     if (word_count == dict_size) {
       dict_size *= 2;
       dict = (Dictionary) realloc(dict, sizeof(char*) * dict_size);
+      if (!dict) {
+          free(dict);
+          fclose(input);
+          free(buffer);
+          return 0;
+      }
     }
     // save the word in a new allocated space and put it into the dictionary
     word = malloc(sizeof(char) * word_len + 1);
+    if (!word) {
+        free_dictionary(dict, word_count);
+        fclose(input); // *possible fixes here
+        free(buffer);
+        return 0;
+    }
     strncpy(word, buffer, word_len + 1);
     dict[word_count] = word;
 
@@ -73,6 +89,7 @@ void free_dictionary(Dictionary dict, size_t size) {
   for (size_t i = 0; i < size; i++) {
     free(dict[i]);
   }
+  free(dict); // *possible fix
 }
 
 int check_spelling(Dictionary dict, size_t size, char* word) {
