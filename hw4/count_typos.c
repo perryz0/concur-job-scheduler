@@ -89,7 +89,7 @@ int main(int argc, char* argv[]) {
   typos_output = fopen(typos_filename, "w");
   if (!typos_output) {
     fprintf(stderr, "Failed to create %s for typos output.\n", typos_filename);
-    
+   
     // *free memory that was allocated for typos output and missing int return
     free(typos_filename);
     return EXIT_FAILURE;
@@ -141,7 +141,7 @@ int main(int argc, char* argv[]) {
   }
 
 
-  // TODO: Free all allocated resources.
+  // *free all allocated resources after use
   fclose(text);
   free_dictionary(dict, dict_size);
   fclose(stats_output);
