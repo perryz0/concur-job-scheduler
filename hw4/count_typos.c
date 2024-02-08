@@ -92,6 +92,7 @@ int main(int argc, char* argv[]) {
     
     // *free memory that was allocated for typos output and missing int return
     free(typos_filename);
+    return EXIT_FAILURE;
   }
 
   // build the dictionary
