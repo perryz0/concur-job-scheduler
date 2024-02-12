@@ -328,20 +328,26 @@ suite("T9") {
     DestroyT9(dict);
   }
 
-  test("Checks the last words in a big dictionary") {
+  test("Checks the middle words in a big dictionary") {     // Line ~40000
     T9* dict = InitializeFromFileT9("dictionary.txt");
     safe_assert(dict != NULL);
 
-    char* word1 = PredictT9(dict, "9968749");
-    char* word2 = PredictT9(dict, "9999982");
-    char* word3 = PredictT9(dict, "99999827");
-    char* word4 = PredictT9(dict, "99999828");
-    char* word5 = PredictT9(dict, "99999999");
-    AssertReturnedStringEquals("zymurgy", word1);
-    AssertReturnedStringEquals("zyzzyva", word2);
-    AssertReturnedStringEquals("zyzzyvas", word3);
-    safe_assert(word4 == NULL);
-    safe_assert(word5 == NULL);
+    char* word1 = PredictT9(dict, "5655");
+    char* word2 = PredictT9(dict, "565533");
+    char* word3 = PredictT9(dict, "565537");
+    char* word4 = PredictT9(dict, "5655377");
+    char* word5 = PredictT9(dict, "5655437##");
+    char* word6 = PredictT9(dict, "5655464");
+    char* word7 = PredictT9(dict, "56554767");
+    char* word8 = PredictT9(dict, "565567");
+    AssertReturnedStringEquals("loll", word1);
+    AssertReturnedStringEquals("lolled", word2);
+    AssertReturnedStringEquals("loller", word3);
+    AssertReturnedStringEquals("lollers", word4);
+    AssertReturnedStringEquals("lollies", word5);
+    AssertReturnedStringEquals("lolling", word6);
+    AssertReturnedStringEquals("lollipop", word7);
+    AssertReturnedStringEquals("lollop", word8);
   
     DestroyT9(dict);
   }
