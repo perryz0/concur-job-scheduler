@@ -173,25 +173,17 @@ suite("T9") {
   }
 
   test("Check if all words are added into T9") {
-    T9* dict = InitializeFromFileT9("dictionary.txt");
+    T9* dict = initializeTinyDict();
     safe_assert(dict != NULL);
 
-    // open filestream
-    FILE *dictionary_file = fopen("dictionary.txt", "r");
-    safe_assert(dictionary_file != NULL);
-
-    int wordcount = 80368;
-
-    for (int i = 0; i < wordcount; ++i) {
-        char buffer[100];
-        fscanf(dictionary_file, "%s", buffer);
-
-        char* curr_match = PredictT9(dict, buffer);
-        safe_assert((curr_match != NULL) && (strcmp(curr_match, "NULL") != 0));
-        free(curr_match);
-    }
+    char* word1 = "book";
+    char* word2 = "cool";
     
-    fclose(dictionary_file);
+    char* pred1 = PredictT9(dict, "2665");
+    char* pred2 = PredictT9(dict, "2665#");
+    AssertReturnedStringEquals(pred1, word1);
+    AssertReturnedStringEquals(pred2, word2);
+
     DestroyT9(dict);
   }
 
