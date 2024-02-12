@@ -348,6 +348,11 @@ suite("T9") {
     DestroyT9(dict);
   }
 
+  test("Checks if NULL is properly returned when no file exists") {
+    T9* dict = InitializeFromFileT9("nonfile.java");
+    safe_assert(dict == NULL);
+  }
+
 
 }
 
