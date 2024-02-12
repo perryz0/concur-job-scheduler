@@ -26,7 +26,7 @@ suite("T9") {
     DestroyT9(dict);
   }
 
-  test("Add more words to T9 dictionary") {
+  test("Add multiple words with same encoding and test predictions") {
     T9* dict = InitializeEmptyT9();
     safe_assert(dict != NULL);
 
@@ -228,16 +228,52 @@ suite("T9") {
   }
 
   test("Checks if prediction returns NULL when digits come after pound") {
-    T9* dict = initializeTinyDict();
+    T9* dict = initializeTinyDict();            // fix
 
     char* word1 = PredictT9(dict, "2665");
     char* word2 = PredictT9(dict, "2665#");
     char* word3 = PredictT9(dict, "2665#2");
-    safe_assert(word1 != NULL);
-    safe_assert(word2 != NULL);
-    safe_assert(word3 == NULL);
     AssertReturnedStringEquals("book", word1);
     AssertReturnedStringEquals("cool", word2);
+    safe_assert(word3 == NULL);
+  
+    DestroyT9(dict);
+  }
+
+  test("Predict word with multiple pound signs using passed dictionary") {
+    T9* dict = InitializeFromFileT9("dictionary.txt");
+    safe_assert(dict != NULL);
+
+    char* word1 = PredictT9(dict, "2665");
+    char* word2 = PredictT9(dict, "2665#");
+    char* word3 = PredictT9(dict, "2665##");
+    char* word4 = PredictT9(dict, "2665###");
+    char* word5 = PredictT9(dict, "2665####");
+    char* word6 = PredictT9(dict, "2665#####");
+    char* word7 = PredictT9(dict, "2665######"); // should have no entry
+    AssertReturnedStringEquals("amok", word1);
+    AssertReturnedStringEquals("bonk", word2);
+    AssertReturnedStringEquals("book", word3);
+    AssertReturnedStringEquals("conk", word4);
+    AssertReturnedStringEquals("cook", word5);
+    AssertReturnedStringEquals("cool", word6);
+    safe_assert(word7 == NULL);
+  
+    DestroyT9(dict);
+  }
+
+  test("Checks invalid for when nums only has pound or starts with pound") {
+    T9* dict = InitializeFromFileT9("dictionary.txt");
+    safe_assert(dict != NULL);
+
+    char* word1 = PredictT9(dict, "#");
+    char* word2 = PredictT9(dict, "####");
+    char* word3 = PredictT9(dict, "###3232");
+    char* word4 = PredictT9(dict, "#sdsda");
+    safe_assert(word1 == NULL);
+    safe_assert(word2 == NULL);
+    safe_assert(word3 == NULL);
+    safe_assert(word4 == NULL);
   
     DestroyT9(dict);
   }
