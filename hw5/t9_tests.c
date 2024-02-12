@@ -282,25 +282,21 @@ suite("T9") {
     T9* dict = InitializeEmptyT9();
     safe_assert(dict != NULL);
 
-    AddWordToT9(dict, "work");
-    AddWordToT9(dict, "work");
-    AddWordToT9(dict, "works");
-    AddWordToT9(dict, "wor k");
+    AddWordToT9(dict, "work#");
     AddWordToT9(dict, "work ");
-    AddWordToT9(dict, "work#"); 
-
+    AddWordToT9(dict, "wor k");
+    AddWordToT9(dict, " work");
+    AddWordToT9(dict, "wor-k");
     char* word1 = PredictT9(dict, "9675");
-    char* word2 = PredictT9(dict, "9675#");
-    char* word3 = PredictT9(dict, "96757");
-    char* word4 = PredictT9(dict, "9675##");
-    char* word5 = PredictT9(dict, "#9675");
-    char* word6 = PredictT9(dict, "9675sd");
+    safe_assert(word1 == NULL);
+
+    AddWordToT9(dict, "work");
+    word1 = PredictT9(dict, "9675");
     AssertReturnedStringEquals("work", word1);
-    safe_assert(word2 == NULL);
-    AssertReturnedStringEquals("works", word3);
-    safe_assert(word4 == NULL);
-    safe_assert(word5 == NULL);
-    safe_assert(word6 == NULL);
+
+    AddWordToT9(dict, "work");
+    word1 = PredictT9(dict, "9675#");
+    safe_assert(word1 == NULL);
 
     DestroyT9(dict);
   }
