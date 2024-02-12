@@ -66,19 +66,69 @@ suite("T9") {
     AssertReturnedStringEquals("b", word2);
   }
 
-  test("Predict word with non-existent sequence") {
+  test("Predict word with no actual matches") {
     T9* dict = initializeTinyDict();
 
-    char* word = PredictT9(dict, "1234");
+    char* word = PredictT9(dict, "2232323232");
     safe_assert(word == NULL);
   
     DestroyT9(dict);
   }
 
-  test("Predict word with non-existent sequence") {
+  test("Predict word with empty sequence") {
     T9* dict = initializeTinyDict();
 
-    char* word = PredictT9(dict, "1234");
+    char* word = PredictT9(dict, "");
+    safe_assert(word == NULL);
+  
+    DestroyT9(dict);
+  }
+
+  test("Predict word with NULL sequence") {
+    T9* dict = initializeTinyDict();
+
+    char* word = PredictT9(dict, NULL);
+    safe_assert(word == NULL);
+  
+    DestroyT9(dict);
+  }
+
+  test("Predict word with non-numerical sequence") {
+    T9* dict = initializeTinyDict();
+
+    char* word = PredictT9(dict, "1aaa");
+    safe_assert(word == NULL);
+  
+    DestroyT9(dict);
+  }
+
+  test("Predict word with invalid pound usage") {
+    T9* dict = InitializeFromFileT9("small_dictionary.txt");
+    safe_assert(dict != NULL);
+
+
+    char* word = PredictT9(dict, "2665#2");
+    safe_assert(word == NULL);
+  
+    DestroyT9(dict);
+  }
+
+  test("Predict word with sequence containing 1") {
+    T9* dict = InitializeFromFileT9("small_dictionary.txt");
+    safe_assert(dict != NULL);
+
+    char* word = PredictT9(dict, "2615");
+    safe_assert(word == NULL);
+  
+    DestroyT9(dict);
+  }
+
+  test("Predict word with sequence containing 0") {
+    T9* dict = InitializeFromFileT9("small_dictionary.txt");
+    safe_assert(dict != NULL);
+
+
+    char* word = PredictT9(dict, "2605");
     safe_assert(word == NULL);
   
     DestroyT9(dict);
