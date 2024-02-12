@@ -328,6 +328,24 @@ suite("T9") {
     DestroyT9(dict);
   }
 
+  test("Checks the last words in a big dictionary") {
+    T9* dict = InitializeFromFileT9("dictionary.txt");
+    safe_assert(dict != NULL);
+
+    char* word1 = PredictT9(dict, "9968749");
+    char* word2 = PredictT9(dict, "9999982");
+    char* word3 = PredictT9(dict, "99999827");
+    char* word4 = PredictT9(dict, "99999828");
+    char* word5 = PredictT9(dict, "99999999");
+    AssertReturnedStringEquals("zymurgy", word1);
+    AssertReturnedStringEquals("zyzzyva", word2);
+    AssertReturnedStringEquals("zyzzyvas", word3);
+    safe_assert(word4 == NULL);
+    safe_assert(word5 == NULL);
+  
+    DestroyT9(dict);
+  }
+
 
 }
 
