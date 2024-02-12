@@ -103,7 +103,7 @@ suite("T9") {
   }
 
   test("Predict word with invalid pound usage") {
-    T9* dict = InitializeFromFileT9("small_dictionary.txt");
+    T9* dict = InitializeFromFileT9("dictionary.txt");
     safe_assert(dict != NULL);
 
 
@@ -114,7 +114,7 @@ suite("T9") {
   }
 
   test("Predict word with sequence containing 1") {
-    T9* dict = InitializeFromFileT9("small_dictionary.txt");
+    T9* dict = InitializeFromFileT9("dictionary.txt");
     safe_assert(dict != NULL);
 
     char* word = PredictT9(dict, "2615");
@@ -124,11 +124,33 @@ suite("T9") {
   }
 
   test("Predict word with sequence containing 0") {
-    T9* dict = InitializeFromFileT9("small_dictionary.txt");
+    T9* dict = InitializeFromFileT9("dictionary.txt");
     safe_assert(dict != NULL);
 
 
     char* word = PredictT9(dict, "2605");
+    safe_assert(word == NULL);
+  
+    DestroyT9(dict);
+  }
+
+  test("Predict word with sequence containing invalid asterisks") {
+    T9* dict = InitializeFromFileT9("dictionary.txt");
+    safe_assert(dict != NULL);
+
+
+    char* word = PredictT9(dict, "2665*");
+    safe_assert(word == NULL);
+  
+    DestroyT9(dict);
+  }
+
+  test("Predict word with sequence containing invalid chars") {
+    T9* dict = InitializeFromFileT9("dictionary.txt");
+    safe_assert(dict != NULL);
+
+
+    char* word = PredictT9(dict, "2665%");
     safe_assert(word == NULL);
   
     DestroyT9(dict);
