@@ -156,7 +156,24 @@ suite("T9") {
     DestroyT9(dict);
   }
 
+  test("Add existing word into dictionary and it remains unchanged") {
+    T9* dict = InitializeEmptyT9();
+    safe_assert(dict != NULL);
 
+    AddWordToT9(dict, "book");
+
+    char* word_before = PredictT9(dict, "2665");
+    safe_assert(word_before != NULL);
+
+    AddWordToT9(dict, "book");
+    
+    char* word_after = PredictT9(dict, "2665");
+    safe_assert(word_after != NULL);
+    
+    safe_assert(strcmp(word_before, word_after) == 0);
+
+    DestroyT9(dict);
+  }
 }
 
 void AssertReturnedStringEquals(char* expected, char* actual) {
