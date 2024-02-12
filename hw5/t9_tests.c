@@ -226,6 +226,23 @@ suite("T9") {
 
     DestroyT9(dict);
   }
+
+  test("Checks if prediction returns NULL when digits come after pound") {
+    T9* dict = initializeTinyDict();
+
+    char* word1 = PredictT9(dict, "2665");
+    char* word2 = PredictT9(dict, "2665#");
+    char* word3 = PredictT9(dict, "2665#2");
+    safe_assert(word1 != NULL);
+    safe_assert(word2 != NULL);
+    safe_assert(word3 == NULL);
+    AssertReturnedStringEquals("book", word1);
+    AssertReturnedStringEquals("cool", word2);
+  
+    DestroyT9(dict);
+  }
+
+
 }
 
 void AssertReturnedStringEquals(char* expected, char* actual) {
