@@ -305,6 +305,29 @@ suite("T9") {
     DestroyT9(dict);
   }
 
+  test("Check prediction with invalid upper case words") {
+    T9* dict = InitializeEmptyT9();
+    safe_assert(dict != NULL);
+
+    AddWordToT9(dict, "WORK");
+    char* word1 = PredictT9(dict, "9675");
+    safe_assert(word1 == NULL);
+
+    AddWordToT9(dict, "woRk");
+    char* word2 = PredictT9(dict, "9675");
+    safe_assert(word2 == NULL);
+
+    AddWordToT9(dict, "work");
+    char* word3 = PredictT9(dict, "9675");
+    AssertReturnedStringEquals("work", word3);
+
+    AddWordToT9(dict, "woRk");
+    char* word4 = PredictT9(dict, "9675#");
+    safe_assert(word4 == NULL);
+
+    DestroyT9(dict);
+  }
+
 
 }
 
