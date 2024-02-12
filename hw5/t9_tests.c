@@ -106,7 +106,6 @@ suite("T9") {
     T9* dict = InitializeFromFileT9("dictionary.txt");
     safe_assert(dict != NULL);
 
-
     char* word = PredictT9(dict, "2665#2");
     safe_assert(word == NULL);
   
@@ -127,7 +126,6 @@ suite("T9") {
     T9* dict = InitializeFromFileT9("dictionary.txt");
     safe_assert(dict != NULL);
 
-
     char* word = PredictT9(dict, "2605");
     safe_assert(word == NULL);
   
@@ -137,7 +135,6 @@ suite("T9") {
   test("Predict word with sequence containing invalid asterisks") {
     T9* dict = InitializeFromFileT9("dictionary.txt");
     safe_assert(dict != NULL);
-
 
     char* word = PredictT9(dict, "2665*");
     safe_assert(word == NULL);
@@ -174,6 +171,42 @@ suite("T9") {
 
     DestroyT9(dict);
   }
+
+  test("Check if all words are added into T9") {
+    T9* dict = InitializeFromFileT9("dictionary.txt");
+    safe_assert(dict != NULL);
+
+    // open filestream
+    FILE *dictionary_file = fopen("dictionary.txt", "r");
+    safe_assert(dictionary_file != NULL);
+
+    int wordcount = 80368;
+
+    for (int i = 0; i < wordcount; ++i) {
+        char buffer[100];
+        fscanf(dictionary_file, "%s", buffer);
+
+        char* curr_match = PredictT9(dict, buffer);
+        safe_assert((curr_match != NULL) && (strcmp(curr_match, "NULL") != 0));
+        free(curr_match);
+    }
+    
+    fclose(dictionary_file);
+    DestroyT9(dict);
+  }
+
+  test("Additional check if all words are added to T9") {
+    T9* dict = initializeTinyDict();
+
+    char* word1 = PredictT9(dict, "2665");
+    char* word2 = PredictT9(dict, "2665#");
+    safe_assert(word1 != NULL);
+    safe_assert(word2 != NULL);
+  
+    DestroyT9(dict);
+  }
+
+
 }
 
 void AssertReturnedStringEquals(char* expected, char* actual) {
