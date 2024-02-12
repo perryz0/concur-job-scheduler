@@ -278,6 +278,33 @@ suite("T9") {
     DestroyT9(dict);
   }
 
+  test("Check prediction with duplicate words, including invalid variants") {
+    T9* dict = InitializeEmptyT9();
+    safe_assert(dict != NULL);
+
+    AddWordToT9(dict, "work");
+    AddWordToT9(dict, "work");
+    AddWordToT9(dict, "works");
+    AddWordToT9(dict, "wor k");
+    AddWordToT9(dict, "work ");
+    AddWordToT9(dict, "work#"); 
+
+    char* word1 = PredictT9(dict, "9675");
+    char* word2 = PredictT9(dict, "9675#");
+    char* word3 = PredictT9(dict, "96757");
+    char* word4 = PredictT9(dict, "9675##");
+    char* word5 = PredictT9(dict, "#9675");
+    char* word6 = PredictT9(dict, "9675sd");
+    AssertReturnedStringEquals("work", word1);
+    safe_assert(word2 == NULL);
+    AssertReturnedStringEquals("works", word3);
+    safe_assert(word4 == NULL);
+    safe_assert(word5 == NULL);
+    safe_assert(word6 == NULL);
+
+    DestroyT9(dict);
+  }
+
 
 }
 
