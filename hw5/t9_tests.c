@@ -204,25 +204,25 @@ suite("T9") {
     T9* dict = InitializeEmptyT9();
     safe_assert(dict != NULL);
 
-    AddWordToT9(dict, "boo");
-    AddWordToT9(dict, "book");
-    AddWordToT9(dict, "books");
-    AddWordToT9(dict, "boot");
-    AddWordToT9(dict, "booker");
-    AddWordToT9(dict, "booked"); 
+    AddWordToT9(dict, "wor");
+    AddWordToT9(dict, "work");
+    AddWordToT9(dict, "works");
+    AddWordToT9(dict, "wort");
+    AddWordToT9(dict, "worker");
+    AddWordToT9(dict, "worked"); 
 
-    char* word1 = PredictT9(dict, "266");
-    char* word2 = PredictT9(dict, "2665");
-    char* word3 = PredictT9(dict, "26657");
-    char* word4 = PredictT9(dict, "2668");
-    char* word5 = PredictT9(dict, "266537");
-    char* word6 = PredictT9(dict, "266533");
-    AssertReturnedStringEquals("boo", word1);
-    AssertReturnedStringEquals("book", word2);
-    AssertReturnedStringEquals("books", word3);
-    AssertReturnedStringEquals("boot", word4);
-    AssertReturnedStringEquals("booker", word5);
-    AssertReturnedStringEquals("booked", word6);
+    char* word1 = PredictT9(dict, "967");
+    char* word2 = PredictT9(dict, "9675");
+    char* word3 = PredictT9(dict, "96757");
+    char* word4 = PredictT9(dict, "9678");
+    char* word5 = PredictT9(dict, "967537");
+    char* word6 = PredictT9(dict, "967533");
+    AssertReturnedStringEquals("wor", word1);
+    AssertReturnedStringEquals("work", word2);
+    AssertReturnedStringEquals("works", word3);
+    AssertReturnedStringEquals("wort", word4);
+    AssertReturnedStringEquals("worker", word5);
+    AssertReturnedStringEquals("worked", word6);
 
     DestroyT9(dict);
   }
