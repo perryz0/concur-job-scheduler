@@ -3,5 +3,12 @@
 
 # Ignore built object files
 *.o
-!hw5/t9_lib.o
-!hw5/t9_lib_buggy.o
+
+# Ignore hw3 files
+hw3/**
+
+# Ignore hw4 files and subdirectories
+hw4/**
+
+# Ignore hw5 files and subdirectories
+hw5/**
