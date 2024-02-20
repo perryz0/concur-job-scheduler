@@ -4,18 +4,11 @@
 // Macros for useful constant values
 #define MAX_CHILDREN 8
 
-// Individual TrieNode structure
-typedef struct TrieNode {
-    char* word;
-    struct TrieNode* children[MAX_CHILDREN]; // arr of prefixes that branch out
-    struct TrieNode* next; // linked list of nodes for the "#" branches
-};
-
+// Individual T9 TrieNode structure
 typedef struct T9 {
-    // TODO: what fields should this struct have?
-    // You can use this struct as a node in your trie
-    
-    TrieNode* root;
+    char* nodeWord;
+    struct T9* children[MAX_CHILDREN]; // children arr of T9 numbers 2-9
+    struct T9* next; // linked list of nodes for the "#" branches
 } T9;
 
 #endif  // T9_PRIV_H_
