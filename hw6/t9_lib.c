@@ -125,19 +125,17 @@ void AddWordToT9(T9* dict, const char* word) {
         current->currWord = (char*)malloc((strlen(word) + 1));
         strncpy(current->currWord, word, strlen(word) + 1);
     } else {
-        // The T9 number sequence already exists, add word into linked list
-        T9* temp = current;
-        while (temp->nextWord != NULL) {
+        while (current->nextWord != NULL) {
             // Traverse down the linked list
-            if (strncmp(temp->currWord, word, strlen(word) + 1) == 0) {
+            if (strncmp(current->currWord, word, strlen(word) + 1) == 0) {
                 // If the word already exists, exit the function
                 return;
             }
-            temp = temp->nextWord;
+            current = current->nextWord;
         }
 
         // Check the last word in the linked list
-        if (strncmp(temp->currWord, word, strlen(word) + 1) == 0) {
+        if (strncmp(current->currWord, word, strlen(word) + 1) == 0) {
             // If the word already exists, exit the function
             return;
         }
@@ -162,15 +160,14 @@ char* PredictT9(T9* dict, const char* nums) {
     T9* current = dict;
     int numPounds = 0;
 
+    // Handles invalid input where '#' is at the beginning
+    if (nums[0] == '#') {
+        return NULL;
+    }
     // Iterates through each digit of the number sequence pointed by nums
     for (int i = 0; nums[i] != '\0'; i++) {
         if (nums[i] == '#') {
             numPounds++;
-
-            // Handles invalid input where '#' is at the beginning
-            if (i == 0) {
-                return NULL;
-            }
         } else {
             // Handles invalid input where digits come after first '#'
             if (numPounds != 0) {
