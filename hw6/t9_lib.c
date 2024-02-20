@@ -189,7 +189,25 @@ char* PredictT9(T9* dict, const char* nums) {
 }
 
 void DestroyT9(T9* dict) {
-    // TODO: your code goes here
+    // Recursively traverse through the Trie and destroy child nodes
+    for (int i = 0; i < MAX_CHILDREN; i++) {
+        if (dict->children[i] != NULL) {
+            DestroyT9(dict->children[i]);
+        }
+    }
+
+    // Destroy linked list of "#" key stored nodes
+    T9* current = dict->nextWord;
+    while (current != NULL) {
+        T9* temp = current;
+        current = current->nextWord;
+        free(temp->currWord);
+        free(temp);
+    }
+
+    // Free memory for the current node
+    free(dict->currWord);
+    free(dict);
 }
 
 
