@@ -88,6 +88,9 @@ T9* InitializeFromFileT9(const char* filename) {
 }
 
 void AddWordToT9(T9* dict, const char* word) {
+    if (word[0] == '\0') {
+        return;
+    }
     // Start traversal from the root
     T9* current = dict;
 
@@ -196,7 +199,7 @@ char* PredictT9(T9* dict, const char* nums) {
     if (numPounds == 0) {
         return current->currWord;
     } else {
-        return NULL; // Not enough pound signs to specify the word uniquely
+        return NULL;
     }
 }
 
