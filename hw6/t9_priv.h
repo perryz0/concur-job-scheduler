@@ -18,18 +18,4 @@ typedef struct T9 {
     TrieNode* root;
 } T9;
 
-// Helper function declarations
-
-// Create new TrieNode
-TrieNode* createNode();
-
-// Destroy entire Trie from memory
-void destroyTrie(TrieNode* root);
-
-// Add word to the Trie
-void addWord(TrieNode* root, char* word);
-
-// Search word in the trie
-void searchTrie(TrieNode* root, char* prefix);
-
 #endif  // T9_PRIV_H_
