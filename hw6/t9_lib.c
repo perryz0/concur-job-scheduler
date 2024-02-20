@@ -88,7 +88,7 @@ T9* InitializeFromFileT9(const char* filename) {
 }
 
 void AddWordToT9(T9* dict, const char* word) {
-    if (word[0] == '\0' || word == NULL) {
+    if (word == NULL || word[0] == '\0') {
         return;
     }
     // Start traversal from the root
@@ -219,7 +219,6 @@ void DestroyT9(T9* dict) {
     while (current != NULL) {
         T9* temp = current;
         current = current->nextWord;
-        
         free(temp->currWord);
         free(temp);
     }
