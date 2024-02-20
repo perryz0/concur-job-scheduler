@@ -192,6 +192,9 @@ void DestroyT9(T9* dict) {
     // TODO: your code goes here
 }
 
+
+// HELPER FUNCTION DEFINITIONS (comments above in declarations)
+
 int charToDigit(char letter) {
     if (letter >= 'a' && letter <= 'c') return 2;
     if (letter >= 'd' && letter <= 'f') return 3;
