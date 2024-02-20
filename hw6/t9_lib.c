@@ -58,26 +58,26 @@ T9* InitializeFromFileT9(const char* filename) {
     FILE* file = fopen(filename, "r");
 
     // Handles non-existent file error
-    if (file == NULL) {
-        fprintf(stderr, "Error opening file %s\n", filename);
-        fclose(file);
+    if (!file) {
+        perror("Error: ");
         return NULL;
     }
 
     // Max word length 50 and +1 for null terminator
-    char word[51];
+    char word[MAX_WORD_LENGTH];
     // Iterate through each line (i.e. 1 line = 1 word) in the file
     while (fgets(word, sizeof(word), file) != NULL) {
-        // Remove newline character for each line of word in file
         int length = strlen(word);
+        // Remove newline character for each line of word in file
+        if (word[length - 1] == '\n') {
+            word[length - 1] = '\0';
+            length--;
+        }
         // Check if word exceeds maximum length
         if (length > 50) {
             fprintf(stderr, "Word '%s' exceeds maximum length. Skipping.\n",
                                                                         word);
             continue;
-        }
-        if (word[length - 1] == '\n') {
-            word[length - 1] = '\0';
         }
         AddWordToT9(dict, word);
     }
@@ -96,6 +96,10 @@ void AddWordToT9(T9* dict, const char* word) {
         // Initialize current keypad digit
         int digit = charToDigit(word[i]);
 
+        if (digit == -1) {
+            return;
+        }
+
         // Checks if the number digit exists within the child or not
         if (current->children[digit] == NULL) {
             // Allocates memory for the new number digit
@@ -113,7 +117,7 @@ void AddWordToT9(T9* dict, const char* word) {
         current = current->children[digit];
     }
 
-    // Post-traversal: Checks if word already exists in dictionary
+    // Post-traversal: First check if word already exists in dictionary
     if (current->currWord == NULL) {
         // Allocate memory and add the new word to T9 dictionary
         current->currWord = (char*)malloc((strlen(word) + 1));
@@ -122,6 +126,9 @@ void AddWordToT9(T9* dict, const char* word) {
         // The T9 number sequence already exists, add word into linked list
         while (current->nextWord != NULL) {
             // Traverse down the linked list
+            if (current->currWord == word) {
+                return;
+            }
             current = current->nextWord;
         }
 
@@ -185,7 +192,12 @@ char* PredictT9(T9* dict, const char* nums) {
     }
 
     // Return the word if found, otherwise return NULL
-    return (numPounds == 0) ? current->currWord : NULL;
+    // Check if all pound signs are used
+    if (numPounds == 0) {
+        return current->currWord;
+    } else {
+        return NULL; // Not enough pound signs to specify the word uniquely
+    }
 }
 
 void DestroyT9(T9* dict) {

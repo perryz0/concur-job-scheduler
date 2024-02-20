@@ -3,6 +3,7 @@
 
 // Macros for useful constant values
 #define MAX_CHILDREN 8
+#define MAX_WORD_LENGTH 51
 
 // Individual T9 trie node that stores info about a word and its associated
 // T9 number sequence representation.
