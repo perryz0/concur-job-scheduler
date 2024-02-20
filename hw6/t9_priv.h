@@ -9,7 +9,7 @@ typedef struct TrieNode {
     char* word;
     struct TrieNode* children[MAX_CHILDREN]; // arr of prefixes that branch out
     struct TrieNode* next; // linked list of nodes for the "#" branches
-}
+};
 
 typedef struct T9 {
     // TODO: what fields should this struct have?
