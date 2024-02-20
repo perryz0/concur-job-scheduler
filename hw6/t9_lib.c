@@ -14,6 +14,12 @@
 //   - letter: Letter (part of a word) being translated into T9 number digit
 int charToDigit(char letter);
 
+// Helps initialize an empty children array of number nodes.
+// PARAMS
+//
+//
+void initializeChildNodes(T9* parent);
+
 T9* InitializeEmptyT9() {
     T9* dict = (T9*)malloc(sizeof(T9));
 
@@ -21,9 +27,7 @@ T9* InitializeEmptyT9() {
     dict->currWord = NULL;
 
     // Initialize empty children for new root node
-    for (int i = 0; i < MAX_CHILDREN; ++i) {
-        dict->children[i] = NULL;
-    }
+    initializeChildNodes(dict);
 
     // To initialize an empty linked list
     dict->nextWord = NULL;
@@ -81,9 +85,7 @@ void AddWordToT9(T9* dict, const char* word) {
             current->children[digit] = (T9*)malloc(sizeof(T9));
 
             // Initialize keypad digit children to be empty
-            for (int j = 0; j < MAX_CHILDREN; ++j) {
-                current->children[digit]->children[j] = NULL;
-            }
+            initializeChildNodes(current->children[digit]);
 
             // Assign no word/linked list stored at the new number digit
             current->children[digit]->currWord = NULL;
@@ -109,18 +111,65 @@ void AddWordToT9(T9* dict, const char* word) {
 
         // Initialize, allocate memory, and add new word to end of linked list
         current->nextWord = (T9*)malloc(sizeof(struct T9*));
-        for (int i = 0; i < MAX_CHILDREN; ++i) {
-            current->nextWord->children[i] = NULL;
-        }
         current->nextWord->currWord = (char*)malloc((strlen(word) + 1) * sizeof(char));
         strncpy(current->nextWord->currWord, word, strlen(word) + 1);
+
+        // Assign null linked list and child number nodes to the new word
+        initializeChildNodes(current->nextWord);
         current->nextWord->nextWord = NULL;
     }
 }
 
 char* PredictT9(T9* dict, const char* nums) {
-    // TODO: your code goes here
-    return NULL;  // you will want to change this
+    if (nums == NULL) {
+        return NULL;
+    }
+
+    // Starts traversal from the root
+    T9* current = dict;
+    int numPounds = 0;
+
+    // Iterates through each digit of the number sequence pointed by nums
+    for (size_t i = 0; nums[i] != '\0'; i++) {
+        if (nums[i] == '#') {
+            numPounds++;
+
+            // Handles invalid input where '#' is at the beginning
+            if (i == 0) {
+                return NULL;
+            }
+        } else {
+            // Handles invalid input where digits come after first '#'
+            if (numPounds != 0) {
+                return NULL;
+            }
+
+            // Extracts current digit value
+            int digit = nums[i] - '0';
+
+            // Checks if the digit is a valid number between 2 and 9 inclusive
+            if (digit < 2 || digit > 9) {
+                return NULL;
+            }
+
+            // Checks existing num sequences thus far in T9 dictionary
+            if (current->children[digit] == NULL) {
+                return NULL;
+            }
+
+            // Move down the trie to next number digit
+            current = current->children[digit];
+        }
+    }
+
+    // Traverse through the linked list if input has pound signs
+    while (numPounds > 0 && current != NULL && current->nextWord != NULL) {
+        current = current->nextWord;
+        numPounds--;
+    }
+
+    // Return the word if found, otherwise return NULL
+    return (numPounds == 0) ? current->currWord : NULL;
 }
 
 void DestroyT9(T9* dict) {
@@ -137,4 +186,10 @@ int charToDigit(char letter) {
     if (letter >= 't' && letter <= 'v') return 8;
     if (letter >= 'w' && letter <= 'z') return 9;
     return -1;
+}
+
+void initializeChildNodes(T9* parent) {
+    for (int i = 0; i < MAX_CHILDREN; ++i) {
+        parent->children[i] = NULL;
+    }
 }
