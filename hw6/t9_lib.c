@@ -1,3 +1,16 @@
+// Name: Perry Chien
+// Date: 2/19/24
+// CSE 374 Homework 6: T9 Implementation
+/*
+    This is a program that simulates the functionalities of a T9 predictive
+    text system. It provides functions for initializing an empty T9 dictionary,
+    loading words from a file into the dictionary, adding words to dictionary,
+    predicting words based on T9 number sequences, and destroying a dictionary
+    to free memory. The implementation utilizes a trie data structure to store
+    and retrieve words based on their T9 representations. It also checks input
+    validity to ensure only valid T9 key sequences are processed.
+*/
+
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -5,7 +18,8 @@
 #include "t9_lib.h"
 #include "t9_priv.h"
 
-// HELPER FUNCTION DECLARATIONS (with comments)
+
+// HELPER FUNCTION/PROTOTYPE DECLARATIONS (with comments)
 
 // Helps translate letters to corresponding keypad digits. Returns a digit
 // between 2 and 9 inclusive if the letter is a valid lowercase English
@@ -15,10 +29,12 @@
 int charToDigit(char letter);
 
 // Helps initialize an empty children array of number nodes.
-// PARAMS
-//
-//
+// Parameters:
+//   - parent: Pointer to the T9 node whose child number nodes are initialized
 void initializeChildNodes(T9* parent);
+
+
+// FUNCTION IMPLEMENTATIONS (comments & pre-/post- conditions in header file)
 
 T9* InitializeEmptyT9() {
     T9* dict = (T9*)malloc(sizeof(T9));
