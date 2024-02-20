@@ -69,8 +69,8 @@ T9* InitializeFromFileT9(const char* filename) {
     while (fgets(word, sizeof(word), file) != NULL) {
         int length = strlen(word) + 1;
         // Remove newline character for each line of word in file
-        if (word[length - 1] == '\n') {
-            word[length - 1] = '\0';
+        if (word[length - 2] == '\n') {
+            word[length - 2] = '\0';
             length--;
         }
         // Check if word exceeds maximum length
@@ -88,18 +88,21 @@ T9* InitializeFromFileT9(const char* filename) {
 }
 
 void AddWordToT9(T9* dict, const char* word) {
-    if (word == NULL || word[0] == '\0') {
+    // Check if the word here is NULL or empty
+    if (word == NULL || word[0] == 0) {
         return;
     }
+
     // Start traversal from the root
     T9* current = dict;
 
     // Trie traversal until null terminator is hit
-    for (int i = 0; word[i] != '\0'; ++i) {
+    for (int i = 0; word[i] != 0; ++i) {
         // Initialize current keypad digit
         int digit = charToDigit(word[i]);
         int child_index = digit - 2;
 
+        // Check validity of the T9 digit
         if (digit == -1) {
             return;
         }
@@ -154,6 +157,7 @@ void AddWordToT9(T9* dict, const char* word) {
 }
 
 char* PredictT9(T9* dict, const char* nums) {
+    // Handles case when nums is NULL
     if (nums == NULL) {
         return NULL;
     }
@@ -167,7 +171,7 @@ char* PredictT9(T9* dict, const char* nums) {
         return NULL;
     }
     // Iterates through each digit of the number sequence pointed by nums
-    for (int i = 0; nums[i] != '\0'; i++) {
+    for (int i = 0; nums[i] != 0; i++) {
         if (nums[i] == '#') {
             numPounds++;
         } else {
@@ -202,12 +206,7 @@ char* PredictT9(T9* dict, const char* nums) {
     }
 
     // Return the word if found, otherwise return NULL
-    // Check if all pound signs are used
-    if (numPounds == 0) {
-        return current->currWord;
-    } else {
-        return NULL;
-    }
+    return (numPounds == 0) ? current->currWord : NULL;
 }
 
 void DestroyT9(T9* dict) {
