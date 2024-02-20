@@ -72,16 +72,13 @@ T9* InitializeFromFileT9(const char* filename) {
         if (word[length - 1] == '\n') {
             word[length - 1] = '\0';
             length--;
-        }
-        // Check if word exceeds maximum length
-        else if (length > 50) {
+        } else if (length > 50) {   // Check if word exceeds maximum length
             fprintf(stderr, "Word '%s' exceeds maximum length. Skipping.\n",
                                                                         word);
             continue;
         } else {
-
+            AddWordToT9(dict, word);
         }
-        AddWordToT9(dict, word);
     }
 
     // Dealloc file stream after use
