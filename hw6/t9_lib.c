@@ -69,7 +69,13 @@ T9* InitializeFromFileT9(const char* filename) {
     // Iterate through each line (i.e. 1 line = 1 word) in the file
     while (fgets(word, sizeof(word), file) != NULL) {
         // Remove newline character for each line of word in file
-        size_t length = strlen(word);
+        int length = strlen(word);
+        // Check if word exceeds maximum length
+        if (length > 50) {
+            fprintf(stderr, "Word '%s' exceeds maximum length. Skipping.\n",
+                                                                        word);
+            continue;
+        }
         if (word[length - 1] == '\n') {
             word[length - 1] = '\0';
         }
@@ -110,7 +116,7 @@ void AddWordToT9(T9* dict, const char* word) {
     // Post-traversal: Checks if word already exists in dictionary
     if (current->currWord == NULL) {
         // Allocate memory and add the new word to T9 dictionary
-        current->currWord = (char*)malloc((strlen(word) + 1) * sizeof(char));
+        current->currWord = (char*)malloc((strlen(word) + 1));
         strncpy(current->currWord, word, strlen(word) + 1);
     } else {
         // The T9 number sequence already exists, add word into linked list
@@ -120,9 +126,8 @@ void AddWordToT9(T9* dict, const char* word) {
         }
 
         // Initialize, allocate memory, and add new word to end of linked list
-        current->nextWord = (T9*)malloc(sizeof(T9*));
-        current->nextWord->currWord = (char*)malloc((strlen(word) + 1)
-                                                            * sizeof(char));
+        current->nextWord = (T9*)malloc(sizeof(T9));
+        current->nextWord->currWord = (char*)malloc((strlen(word) + 1));
         strncpy(current->nextWord->currWord, word, strlen(word) + 1);
 
         // Assign null linked list and child number nodes to the new word
@@ -133,7 +138,7 @@ void AddWordToT9(T9* dict, const char* word) {
 
 char* PredictT9(T9* dict, const char* nums) {
     if (nums == NULL) {
-        return NULL;
+        return NULL
     }
 
     // Starts traversal from the root
@@ -141,7 +146,7 @@ char* PredictT9(T9* dict, const char* nums) {
     int numPounds = 0;
 
     // Iterates through each digit of the number sequence pointed by nums
-    for (size_t i = 0; nums[i] != '\0'; i++) {
+    for (int i = 0; nums[i] != '\0'; i++) {
         if (nums[i] == '#') {
             numPounds++;
 
@@ -188,6 +193,7 @@ void DestroyT9(T9* dict) {
     for (int i = 0; i < MAX_CHILDREN; i++) {
         if (dict->children[i] != NULL) {
             DestroyT9(dict->children[i]);
+            dict->children[i] = NULL;
         }
     }
 
