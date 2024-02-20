@@ -129,12 +129,20 @@ void AddWordToT9(T9* dict, const char* word) {
         strncpy(current->currWord, word, strlen(word) + 1);
     } else {
         // The T9 number sequence already exists, add word into linked list
-        while (current->nextWord != NULL) {
+        T9* temp = current;
+        while (temp->nextWord != NULL) {
             // Traverse down the linked list
-            if (strncmp(current->currWord, word, strlen(word) + 1) == 0) {
+            if (strncmp(temp->currWord, word, strlen(word) + 1) == 0) {
+                // If the word already exists, exit the function
                 return;
             }
-            current = current->nextWord;
+            temp = temp->nextWord;
+        }
+
+        // Check the last word in the linked list
+        if (strncmp(temp->currWord, word, strlen(word) + 1) == 0) {
+            // If the word already exists, exit the function
+            return;
         }
 
         // Initialize, allocate memory, and add new word to end of linked list
