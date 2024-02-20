@@ -120,7 +120,7 @@ void AddWordToT9(T9* dict, const char* word) {
         }
 
         // Initialize, allocate memory, and add new word to end of linked list
-        current->nextWord = (T9*)malloc(sizeof(struct T9*));
+        current->nextWord = (T9*)malloc(sizeof(T9*));
         current->nextWord->currWord = (char*)malloc((strlen(word) + 1)
                                                             * sizeof(char));
         strncpy(current->nextWord->currWord, word, strlen(word) + 1);
