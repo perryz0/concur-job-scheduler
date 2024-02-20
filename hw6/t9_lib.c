@@ -88,7 +88,7 @@ T9* InitializeFromFileT9(const char* filename) {
 }
 
 void AddWordToT9(T9* dict, const char* word) {
-    if (word[0] == '\0') {
+    if (word[0] == '\0' || word == NULL) {
         return;
     }
     // Start traversal from the root
@@ -104,7 +104,7 @@ void AddWordToT9(T9* dict, const char* word) {
         }
 
         // Checks if the number digit exists within the child or not
-        if (current->children[digit] == NULL) {
+        if (!(current->children[digit])) {
             // Allocates memory for the new number digit
             current->children[digit] = (T9*)malloc(sizeof(T9));
 
@@ -204,12 +204,14 @@ char* PredictT9(T9* dict, const char* nums) {
 }
 
 void DestroyT9(T9* dict) {
+    // Base case: nothing to destroy
+    if (dict == NULL) {
+        return;
+    }
+
     // Recursively traverse through the Trie and destroy child nodes
     for (int i = 0; i < MAX_CHILDREN; i++) {
-        if (dict->children[i] != NULL) {
-            DestroyT9(dict->children[i]);
-            dict->children[i] = NULL;
-        }
+        DestroyT9(dict->children[i]);
     }
 
     // Destroy linked list of "#" key stored nodes
@@ -217,6 +219,7 @@ void DestroyT9(T9* dict) {
     while (current != NULL) {
         T9* temp = current;
         current = current->nextWord;
+        
         free(temp->currWord);
         free(temp);
     }
@@ -225,6 +228,7 @@ void DestroyT9(T9* dict) {
     free(dict->currWord);
     free(dict);
 }
+
 
 
 // HELPER FUNCTION DEFINITIONS (comments above in declarations)
