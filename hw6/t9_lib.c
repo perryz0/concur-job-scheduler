@@ -67,18 +67,19 @@ T9* InitializeFromFileT9(const char* filename) {
     char word[MAX_WORD_LENGTH];
     // Iterate through each line (i.e. 1 line = 1 word) in the file
     while (fgets(word, sizeof(word), file) != NULL) {
-        int length = strlen(word);
+        int length = strlen(word) + 1;
         // Remove newline character for each line of word in file
         if (word[length - 1] == '\n') {
             word[length - 1] = '\0';
             length--;
-        } else if (length > 50) {   // Check if word exceeds maximum length
+        }
+        // Check if word exceeds maximum length
+        if (length > MAX_WORD_LENGTH) {
             fprintf(stderr, "Word '%s' exceeds maximum length. Skipping.\n",
                                                                         word);
             continue;
-        } else {
-            AddWordToT9(dict, word);
         }
+        AddWordToT9(dict, word);
     }
 
     // Dealloc file stream after use
@@ -97,26 +98,27 @@ void AddWordToT9(T9* dict, const char* word) {
     for (int i = 0; word[i] != '\0'; ++i) {
         // Initialize current keypad digit
         int digit = charToDigit(word[i]);
+        int child_index = digit - 2;
 
         if (digit == -1) {
             return;
         }
 
         // Checks if the number digit exists within the child or not
-        if (!(current->children[digit])) {
+        if (!(current->children[child_index])) {
             // Allocates memory for the new number digit
-            current->children[digit] = (T9*)malloc(sizeof(T9));
+            current->children[child_index] = (T9*)malloc(sizeof(T9));
 
             // Initialize keypad digit children to be empty
-            initializeChildNodes(current->children[digit]);
+            initializeChildNodes(current->children[child_index]);
 
             // Assign no word/linked list stored at the new number digit
-            current->children[digit]->currWord = NULL;
-            current->children[digit]->nextWord = NULL;
+            current->children[child_index]->currWord = NULL;
+            current->children[child_index]->nextWord = NULL;
         }
 
         // Traverses current to the child node that matches the digit
-        current = current->children[digit];
+        current = current->children[child_index];
     }
 
     // Post-traversal: First check if word already exists in dictionary
@@ -127,7 +129,7 @@ void AddWordToT9(T9* dict, const char* word) {
     } else {
         while (current->nextWord != NULL) {
             // Traverse down the linked list
-            if (strncmp(current->currWord, word, strlen(word) + 1) == 0) {
+            if (strncmp(current->currWord, word, strlen(word)) == 0) {
                 // If the word already exists, exit the function
                 return;
             }
@@ -135,7 +137,7 @@ void AddWordToT9(T9* dict, const char* word) {
         }
 
         // Check the last word in the linked list
-        if (strncmp(current->currWord, word, strlen(word) + 1) == 0) {
+        if (strncmp(current->currWord, word, strlen(word)) == 0) {
             // If the word already exists, exit the function
             return;
         }
@@ -176,6 +178,7 @@ char* PredictT9(T9* dict, const char* nums) {
 
             // Extracts current digit value
             int digit = nums[i] - '0';
+            int child_index = digit - 2;
 
             // Checks if the digit is a valid number between 2 and 9 inclusive
             if (digit < 2 || digit > 9) {
@@ -183,12 +186,12 @@ char* PredictT9(T9* dict, const char* nums) {
             }
 
             // Checks existing num sequences thus far in T9 dictionary
-            if (current->children[digit] == NULL) {
+            if (current->children[child_index] == NULL) {
                 return NULL;
             }
 
             // Move down the trie to next number digit
-            current = current->children[digit];
+            current = current->children[child_index];
         }
     }
 
