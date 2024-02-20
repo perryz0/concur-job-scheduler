@@ -74,10 +74,12 @@ T9* InitializeFromFileT9(const char* filename) {
             length--;
         }
         // Check if word exceeds maximum length
-        if (length > 50) {
+        else if (length > 50) {
             fprintf(stderr, "Word '%s' exceeds maximum length. Skipping.\n",
                                                                         word);
             continue;
+        } else {
+
         }
         AddWordToT9(dict, word);
     }
@@ -129,7 +131,7 @@ void AddWordToT9(T9* dict, const char* word) {
         // The T9 number sequence already exists, add word into linked list
         while (current->nextWord != NULL) {
             // Traverse down the linked list
-            if (current->currWord == word) {
+            if (strncmp(current->currWord, word, strlen(word) + 1) == 0) {
                 return;
             }
             current = current->nextWord;
