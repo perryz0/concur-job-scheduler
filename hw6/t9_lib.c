@@ -33,11 +33,19 @@ int charToDigit(char letter);
 //   - parent: Pointer to the T9 node whose child number nodes are initialized
 void initializeChildNodes(T9* parent);
 
+// Security check for memory allocation. If unable to allocate storage, then
+// exits the program with stderr message.
+// Parameters:
+//   - ptr: Pointer to the supposedly allocated region of memory
+void mallocCheck(void* ptr);
+
 
 // FUNCTION IMPLEMENTATIONS (comments & pre-/post- conditions in header file)
 
 T9* InitializeEmptyT9() {
     T9* dict = (T9*)malloc(sizeof(T9));
+    // Check for malloc failure possibility
+    mallocCheck(dict);
 
     // Initialize root node so it holds no word and no garbage values
     dict->currWord = NULL;
@@ -112,6 +120,9 @@ void AddWordToT9(T9* dict, const char* word) {
             // Allocates memory for the new number digit
             current->children[child_index] = (T9*)malloc(sizeof(T9));
 
+            // Check for malloc failure possibility
+            mallocCheck(current->children[child_index]);
+
             // Initialize keypad digit children to be empty
             initializeChildNodes(current->children[child_index]);
 
@@ -126,8 +137,13 @@ void AddWordToT9(T9* dict, const char* word) {
 
     // Post-traversal: First check if word already exists in dictionary
     if (current->currWord == NULL) {
-        // Allocate memory and add the new word to T9 dictionary
+        // Allocates memory for the newly stored word
         current->currWord = (char*)malloc((strlen(word) + 1));
+
+        // Check for malloc failure possibility
+        mallocCheck(current->currWord);
+
+        // Adds the new word to T9 dictionary
         strncpy(current->currWord, word, strlen(word) + 1);
     } else {
         while (current->nextWord != NULL) {
@@ -146,8 +162,11 @@ void AddWordToT9(T9* dict, const char* word) {
         }
 
         // Initialize, allocate memory, and add new word to end of linked list
+        // Coupled with malloc functionality security checks
         current->nextWord = (T9*)malloc(sizeof(T9));
+        mallocCheck(current->nextWord);
         current->nextWord->currWord = (char*)malloc((strlen(word) + 1));
+        mallocCheck(current->nextWord->currWord);
         strncpy(current->nextWord->currWord, word, strlen(word) + 1);
 
         // Assign null linked list and child number nodes to the new word
@@ -253,5 +272,12 @@ int charToDigit(char letter) {
 void initializeChildNodes(T9* parent) {
     for (int i = 0; i < MAX_CHILDREN; ++i) {
         parent->children[i] = NULL;
+    }
+}
+
+void mallocCheck(void* ptr) {
+    if (ptr == NULL) {
+        fprintf(stderr, "Failed to allocate memory.\n");
+        exit(EXIT_FAILURE);
     }
 }
