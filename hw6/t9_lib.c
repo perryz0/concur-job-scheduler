@@ -51,7 +51,6 @@ T9* InitializeEmptyT9() {
 }
 
 T9* InitializeFromFileT9(const char* filename) {
-
     // Create empty T9 dictionary to start initialization
     T9* dict = InitializeEmptyT9();
 
@@ -66,8 +65,7 @@ T9* InitializeFromFileT9(const char* filename) {
     }
 
     // Max word length 50 and +1 for null terminator
-    char word[51]; 
-
+    char word[51];
     // Iterate through each line (i.e. 1 line = 1 word) in the file
     while (fgets(word, sizeof(word), file) != NULL) {
         // Remove newline character for each line of word in file
@@ -84,19 +82,16 @@ T9* InitializeFromFileT9(const char* filename) {
 }
 
 void AddWordToT9(T9* dict, const char* word) {
-    
     // Start traversal from the root
     T9* current = dict;
 
     // Trie traversal until null terminator is hit
     for (int i = 0; word[i] != '\0'; ++i) {
-
         // Initialize current keypad digit
         int digit = charToDigit(word[i]);
 
         // Checks if the number digit exists within the child or not
         if (current->children[digit] == NULL) {
-
             // Allocates memory for the new number digit
             current->children[digit] = (T9*)malloc(sizeof(T9));
 
@@ -114,7 +109,6 @@ void AddWordToT9(T9* dict, const char* word) {
 
     // Post-traversal: Checks if word already exists in dictionary
     if (current->currWord == NULL) {
-
         // Allocate memory and add the new word to T9 dictionary
         current->currWord = (char*)malloc((strlen(word) + 1) * sizeof(char));
         strncpy(current->currWord, word, strlen(word) + 1);
@@ -127,7 +121,8 @@ void AddWordToT9(T9* dict, const char* word) {
 
         // Initialize, allocate memory, and add new word to end of linked list
         current->nextWord = (T9*)malloc(sizeof(struct T9*));
-        current->nextWord->currWord = (char*)malloc((strlen(word) + 1) * sizeof(char));
+        current->nextWord->currWord = (char*)malloc((strlen(word) + 1)
+                                                            * sizeof(char));
         strncpy(current->nextWord->currWord, word, strlen(word) + 1);
 
         // Assign null linked list and child number nodes to the new word

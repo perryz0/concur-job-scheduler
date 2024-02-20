@@ -1,19 +1,22 @@
-# Variable definitions
 CC = gcc
 CFLAGS = -g -Wall -std=c11
 
-# Target 1: t9_lib.o
-t9_lib.o: t9_lib.c t9_priv.h
-	$(CC) $(CFLAGS) -o $@ -c t9_lib.c
+all: t9_tests t9_demo
 
-# target 2: t9_demo.o
-t9_demo.o: t9_demo.c t9_priv.h
-	$(CC) $(CFLAGS) -o $@ -c t9_demo.c
+test: t9_tests
+	./t9_tests
 
-# Target 3: t9_demo
-t9_demo: t9_lib.o t9_demo.o
-	$(CC) $(CFLAGS) -o $@ t9_lib.o t9_demo.o
+t9_tests: t9_tests.o t9_lib.o
+	$(CC) $(CFLAGS) -o $@ $^
 
-# Clean up files after usage
+t9_demo: t9_demo.o t9_lib.o
+	$(CC) $(CFLAGS) -o $@ $^
+
+t9_tests.o: t9_tests.c t9_lib.h safe_assert.h
+	$(CC) $(CFLAGS) -o $@ -c $<
+
+t9_demo.o: t9_demo.c t9_lib.h
+	$(CC) $(CFLAGS) -o $@ -c $<
+
 clean:
-	rm -f t9_demo.o t9_lib.o t9_demo
+	rm -f t9_demo.o t9_tests.o t9_tests t9_demo
