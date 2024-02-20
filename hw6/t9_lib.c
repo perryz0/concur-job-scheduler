@@ -138,7 +138,7 @@ void AddWordToT9(T9* dict, const char* word) {
 
 char* PredictT9(T9* dict, const char* nums) {
     if (nums == NULL) {
-        return NULL
+        return NULL;
     }
 
     // Starts traversal from the root
