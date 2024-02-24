@@ -22,6 +22,9 @@ plot_csv: plot.o Expr.o helpers.o
 	$(CXX) $(COPTS) -o $@ $^
 
 plot: plot_csv
+	if ! pip show matplotlib > /dev/null 2>&1; then \
+		pip install matplotlib; \
+	fi
 	./plot_csv
 	./plot_png.py
 
