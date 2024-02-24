@@ -15,3 +15,6 @@ hw5/**
 
 # Ignore hw6 files and subdirectories
 hw6/**
+
+# Ignore hw7 files and subdirectories
+hw7/**
