@@ -58,7 +58,7 @@ Vector operator*(const Vector &v, const double k) {
 }
 
 // << operator to write Vector as stream output
-ostream &operator<<(ostream &out, const Vector &v) {
+ostream & operator<<(ostream &out, const Vector &v) {
     out << "(" << v.v_[0] << "," << v.v_[1] << "," << v.v_[2] << ")";
     return out;
 }
