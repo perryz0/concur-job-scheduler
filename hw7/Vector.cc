@@ -1,8 +1,9 @@
 #include "Vector.h"
 
-namespace vector374 {
-
+#include <utility>
 using std::swap;
+
+namespace vector374 {
 
 // *HELPER FUNCTIONS
 // Helps initialize vector state to given x y z values
