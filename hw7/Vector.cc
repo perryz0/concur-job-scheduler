@@ -35,7 +35,7 @@ Vector::~Vector() {}
 
 // *OPERATORS
 // = operator for vector assignment (u=v)
-Vector& Vector::operator=(const Vector &rhs) {
+Vector &Vector::operator=(const Vector &rhs) {
     Vector temp(rhs);
     swap(temp.v_, v_);
     return *this;
