@@ -51,14 +51,14 @@ Vector operator*(const double k, const Vector &v) {
     return Vector(k * v.v_[0], k * v.v_[1], k * v.v_[2]);
 }
 
-// Simplified overload of same scalar multiplication on a Vector, but
-// reversed order (i.e. k*v = v*k)
+// Reused overload of same scalar multiplication on a Vector, for cases of
+// reversed multiplication order (i.e. k*v = v*k)
 Vector operator*(const Vector &v, const double k) {
     return k * v;
 }
 
 // << operator to write Vector as stream output
-ostream& operator<<(ostream &out, const Vector &v) {
+ostream &operator<<(ostream &out, const Vector &v) {
     out << "(" << v.v_[0] << "," << v.v_[1] << "," << v.v_[2] << ")";
     return out;
 }
