@@ -27,10 +27,8 @@ Vector::Vector(const Vector &v) {
     init(v.v_[0], v.v_[1], v.v_[2]);
 }
 
-// Destructor to dealloc vector from memory once not needed
-Vector::~Vector() {
-    delete[] v_;
-}
+// Destructor to handle post-dealloc issues (unnecessary in this case)
+Vector::~Vector() {}
 
 // *OPERATORS
 // = operator for vector assignment (u=v)
