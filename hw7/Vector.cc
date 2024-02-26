@@ -2,6 +2,8 @@
 
 namespace vector374 {
 
+using std::swap;
+
 // *HELPER FUNCTIONS
 // Helps initialize vector state to given x y z values
 void Vector::init(const float x, const float y, const float z) {
@@ -33,10 +35,8 @@ Vector::~Vector() {}
 // *OPERATORS
 // = operator for vector assignment (u=v)
 Vector& Vector::operator=(const Vector &rhs) {
-    if (this != &rhs) {
-        delete[] v_;
-        init(rhs.v_[0], rhs.v_[1], rhs.v_[2]);
-    }
+    Vector temp(rhs);
+    swap(temp.v_, v_);
     return *this;
 }
 
