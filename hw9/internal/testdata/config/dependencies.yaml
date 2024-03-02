@@ -1,0 +1,16 @@
+jobs:
+  - hello
+  - name: world
+    dependsOn:
+      - hello
+  - what
+  - name: is
+    dependsOn:
+      - what
+  - name: your
+    dependsOn:
+      - is
+  - name: name?
+    dependsOn:
+      - your
+  - done
