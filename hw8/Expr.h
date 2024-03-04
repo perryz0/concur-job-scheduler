@@ -82,7 +82,7 @@ class Sum : public Expr {
 
 shared_ptr<Expr> operator+(shared_ptr<Expr> lhs, shared_ptr<Expr> rhs);
 
-// TODO: Implement the mathematical product
+// Done implementation for Prod
 class Prod : public Expr {
  public:
   Prod(shared_ptr<Expr> left, shared_ptr<Expr> right);
@@ -98,13 +98,28 @@ class Prod : public Expr {
   shared_ptr<Expr> left_;
   shared_ptr<Expr> right_;
 };
-// TODO: Overload operator* to create a Prod
+// Done overload, similar to operator+
 shared_ptr<Expr> operator*(shared_ptr<Expr> lhs, shared_ptr<Expr> rhs);
 
-// TODO: Implement the mathematical power (e.g. x^2)
-// For the toString(), output in the format of (left^right)
-class Pow : public Expr {};
-// TODO: Overload operator to create a Pow
+// Done implementation for Pow, directly carried over from Prod class
+// For the toString(), output in the format of (left^right); fixed spacing
+class Pow : public Expr {
+ public:
+  Pow(shared_ptr<Expr> left, shared_ptr<Expr> right);
+  shared_ptr<Expr> clone() const;
+  shared_ptr<Expr> setVariables(
+      const std::map<std::string, double>& values) const;
+  string toString() const {
+    return "(" + left_->toString() + "^" + right_->toString() + ")";
+  }
+  double evaluate() const;
+
+ private:
+  shared_ptr<Expr> left_;
+  shared_ptr<Expr> right_;
+};
+
+// Done overload, similar to operator*; addressed operator precedence with ()
 // e.g. (x ^ 2) is x to the power of 2
 // Note, C++ has different operator precedence, so always wrap (L ^ R) in parens
 shared_ptr<Expr> operator^(shared_ptr<Expr> lhs, shared_ptr<Expr> rhs);
