@@ -119,7 +119,7 @@ class Pow : public Expr {
   shared_ptr<Expr> right_;
 };
 
-// Done overload, similar to operator*; addressed operator precedence with ()
+// Done overload, similar to operator*
 // e.g. (x ^ 2) is x to the power of 2
 // Note, C++ has different operator precedence, so always wrap (L ^ R) in parens
 shared_ptr<Expr> operator^(shared_ptr<Expr> lhs, shared_ptr<Expr> rhs);

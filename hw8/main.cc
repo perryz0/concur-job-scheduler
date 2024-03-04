@@ -25,7 +25,7 @@ int main() {
   ExprPtr exp2 = exp1->clone();
   cout << exp2 << endl;
 
-  // TODO: Uncomment the rest of the code as you progress
+  // Done uncommenting, and verified all console output matches expected!
 
   cout << "((x + 374) * (x + 374))  (expected)" << endl;
   ExprPtr exp4 = exp1 * exp1;
