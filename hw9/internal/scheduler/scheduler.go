@@ -25,10 +25,10 @@ func New(config *config.Config) *Scheduler {
 // Run runs all of the configured jobs, writing each
 // job's name to the given writer.
 func (s *Scheduler) Run(writer io.Writer) error {
-	// Create a map to store signal channels for each job
+	// Create a temp map to monitor completion of each job exec
 	jobSignals := make(map[string]chan struct{})
 
-	// Create a new WaitGroup for each invocation
+	// Create WaitGroup to wait for multiple launched goroutines to finish
 	var wg sync.WaitGroup
 
 	// Loop that iterates and executes each job concurrently
@@ -72,7 +72,7 @@ func (s *Scheduler) Run(writer io.Writer) error {
 	return nil
 }
 
-// Helper function that returns the index of a job with the given name in the configuration.
+// Helper function that returns the index of a job within the configuration.
 // If the job is not found, it returns -1.
 func findJobIndex(cfg *config.Config, jobName string) int {
 	for i, job := range cfg.Jobs {
