@@ -25,27 +25,16 @@ func New(config *config.Config) *Scheduler {
 // Run runs all of the configured jobs, writing each
 // job's name to the given writer.
 func (s *Scheduler) Run(writer io.Writer) error {
-	// Map to keep track of completed jobs
-	completed := make(map[string]bool)
-	// Mutex for synchronization
-	var mutex sync.Mutex
+	// Create a map to store signal channels for each job
+	jobSignals := make(map[string]chan struct{})
 
-	// Helper function to execute a job
-	var executeJob func(jobName string)
+	// Create a new WaitGroup for each invocation
+	var wg sync.WaitGroup
 
-	executeJob = func(jobName string) {
-		// Check if the job is already completed
-		mutex.Lock()
-		_, ok := completed[jobName]
-		mutex.Unlock()
-
-		if ok {
-			// Job already completed, return
-			return
-		}
-
+	// Embedded helper function to execute a job
+	var executeJob = func(jobName string) {
 		// Get the job details from the configuration
-		jobIndex := findJobIndex(s.config.Jobs, jobName)
+		jobIndex := findJobIndex(s.config, jobName)
 		if jobIndex == -1 {
 			// Job not found in configuration, return
 			return
@@ -53,30 +42,43 @@ func (s *Scheduler) Run(writer io.Writer) error {
 
 		job := s.config.Jobs[jobIndex]
 
-		// Execute dependencies first
+		// Wait for all dependencies to complete
 		for _, depName := range job.DependsOn {
-			executeJob(depName)
+			<-jobSignals[depName]
 		}
 
 		// Execute the job
-		mutex.Lock()
 		fmt.Fprintf(writer, "%s\n", jobName)
-		completed[jobName] = true
-		mutex.Unlock()
+
+		// Signal job completion
+		close(jobSignals[jobName])
+		wg.Done() // Decrement the WaitGroup counter when the goroutine completes
 	}
 
 	// Execute each job concurrently
 	for _, job := range s.config.Jobs {
-		go executeJob(job.Name)
+		// Increment the WaitGroup counter
+		wg.Add(1)
+
+		// Create a signal channel for the job
+		jobSignals[job.Name] = make(chan struct{})
+
+		// Launch a goroutine to execute the job
+		go func(jobName string) {
+			executeJob(jobName)
+		}(job.Name)
 	}
+
+	// Wait for all goroutines to complete
+	wg.Wait()
 
 	return nil
 }
 
-// Helper function that returns the index of job with the given name in the slice of jobs.
+// Helper function that returns the index of a job with the given name in the configuration.
 // If the job is not found, it returns -1.
-func findJobIndex(jobs []config.Job, jobName string) int {
-	for i, job := range jobs {
+func findJobIndex(cfg *config.Config, jobName string) int {
+	for i, job := range cfg.Jobs {
 		if job.Name == jobName {
 			return i
 		}
