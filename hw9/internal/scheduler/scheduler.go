@@ -31,31 +31,7 @@ func (s *Scheduler) Run(writer io.Writer) error {
 	// Create a new WaitGroup for each invocation
 	var wg sync.WaitGroup
 
-	// Embedded helper function to execute a job
-	var executeJob = func(jobName string) {
-		// Get the job details from the configuration
-		jobIndex := findJobIndex(s.config, jobName)
-		if jobIndex == -1 {
-			// Job not found in configuration, return
-			return
-		}
-
-		job := s.config.Jobs[jobIndex]
-
-		// Wait for all dependencies to complete
-		for _, depName := range job.DependsOn {
-			<-jobSignals[depName]
-		}
-
-		// Execute the job
-		fmt.Fprintf(writer, "%s\n", jobName)
-
-		// Signal job completion
-		close(jobSignals[jobName])
-		wg.Done() // Decrement the WaitGroup counter when the goroutine completes
-	}
-
-	// Execute each job concurrently
+	// Loop that iterates and executes each job concurrently
 	for _, job := range s.config.Jobs {
 		// Increment the WaitGroup counter
 		wg.Add(1)
@@ -65,11 +41,32 @@ func (s *Scheduler) Run(writer io.Writer) error {
 
 		// Launch a goroutine to execute the job
 		go func(jobName string) {
-			executeJob(jobName)
+			// Get the job details from the config
+			jobIndex := findJobIndex(s.config, jobName)
+
+			// Job not found case
+			if jobIndex == -1 {
+				return
+			}
+
+			// Retrieve current job config
+			job := s.config.Jobs[jobIndex]
+
+			// Process all dependencies first
+			for _, depName := range job.DependsOn {
+				<-jobSignals[depName]
+			}
+
+			// Now execute the job
+			fmt.Fprintf(writer, "%s\n", jobName)
+
+			// Signal job completion & decrement the wg counter
+			close(jobSignals[jobName])
+			wg.Done()
 		}(job.Name)
 	}
 
-	// Wait for all goroutines to complete
+	// Wait for all goroutines to complete (until wg counter = 0)
 	wg.Wait()
 
 	return nil
