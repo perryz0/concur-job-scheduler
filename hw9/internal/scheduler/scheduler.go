@@ -62,7 +62,7 @@ func (s *Scheduler) Run(writer io.Writer) error {
 
 			// Signal job completion & decrement the wg counter
 			close(jobSignals[jobName])
-			wg.Done()
+			defer wg.Done()
 		}(job.Name)
 	}
 

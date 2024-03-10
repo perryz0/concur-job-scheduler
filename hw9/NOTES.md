@@ -16,7 +16,9 @@ then worry about generating a DOT graph of the job dependencies.
 - [ ] Delay configuration
 - [ ] Debug log flag
 
-### Simple job scheduling & handling dependencies (first 2)
+### Simple job scheduling & handling dependencies (first 2 parts)
+
+General workflow:
 1. First read YAML config file; each job should be separate entry
 2. Iterate thru the job list
 3. Check dependencies for each job
@@ -25,6 +27,11 @@ then worry about generating a DOT graph of the job dependencies.
 5. Make sure the thread safety is preserved with access synchronization
 6. Implement job concurrency with goroutines
 
-### DOT Graph generation
+Additional comments:
+Had issues with finish running each goroutine with skeleton implementation,
+so I utilized a temp map and a WaitGroup counter to monitor job executions
+and the completion of goroutines.
+
+### DOT Graph generation (part 3)
 
 ### Added tests
