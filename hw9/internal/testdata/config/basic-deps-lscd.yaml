@@ -1,0 +1,7 @@
+jobs:
+  - ls
+  - cd
+  - name: echo
+    dependsOn:
+      - ls
+      - cd

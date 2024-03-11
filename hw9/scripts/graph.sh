@@ -14,7 +14,7 @@ for file in "$@"; do
     exit 1
   fi
 
-  if [ $file != *.dot ]; then
+  if [[ $file != *.dot ]]; then
     echo "$file must have a .dot extension!"
     exit 1
   fi

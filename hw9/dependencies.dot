@@ -1,0 +1,6 @@
+digraph G {
+  "world" -> "hello"
+  "is" -> "what"
+  "your" -> "is"
+  "name?" -> "your"
+}

@@ -1,6 +1,7 @@
 package scheduler
 
 import (
+	"bytes"
 	"fmt"
 	"io"
 	"sync"
@@ -86,13 +87,35 @@ func findJobIndex(cfg *config.Config, jobName string) int {
 // Graph writes a DOT-graph containing the configured jobs
 // to the given writer.
 func (s *Scheduler) Graph(writer io.Writer) error {
-	// TODO: Implement me!
-	//
-	// Hint: You will need to write individual lines of text to
-	//       the io.Writer to create the DOT-graph. See the
-	//       README.md for details on how to get started.
-	//
-	//       For details, see https://graphviz.org/doc/info/lang.html
-	_, err := io.WriteString(writer, "digraph G {}\n")
+	// Generate the graph representation using sequence of memory bytes
+	dotGraph := &bytes.Buffer{}
+
+	// Header format of the graph
+	_, err := io.WriteString(dotGraph, "digraph G {\n")
+	if err != nil {
+		return err
+	}
+
+	// Iterate thru each job in the config
+	for _, job := range s.config.Jobs {
+		// If job has dependencies, write edges from this job to its dependencies
+		for _, depName := range job.DependsOn {
+
+			// Added regex double quotes to prevent special chars from causing issues in graph
+			_, err := fmt.Fprintf(dotGraph, "  \"%s\" -> \"%s\"\n", job.Name, depName)
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	// Footer format of the graph
+	_, err = io.WriteString(dotGraph, "}\n")
+	if err != nil {
+		return err
+	}
+
+	// Copies contents of the buffer to the writer from io reader to writer
+	_, err = io.Copy(writer, dotGraph)
 	return err
 }

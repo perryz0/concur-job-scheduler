@@ -11,7 +11,7 @@ then worry about generating a DOT graph of the job dependencies.
 
 - [x] Simple job scheduling
 - [x] Job scheduling with dependencies
-- [ ] DOT Graph generation
+- [x] DOT Graph generation
 - [ ] Added tests
 - [ ] Delay configuration
 - [ ] Debug log flag
@@ -34,4 +34,31 @@ and the completion of goroutines.
 
 ### DOT Graph generation (part 3)
 
-### Added tests
+Workflow:
+1. Read the README part about generating the DOT graph and the DOT Language
+documentation provided on Graphviz
+2. Initialize a buffer to store the DOT graph representation for efficient
+read and write operations
+3. Write header format and footer format
+4. Implement the middle section (each of the nodes), by iterating thru each
+job in the config
+      - Write edges from some job (if any) to dependencies
+5. Copy the buffer contents to the writer for the eventual .dot redirection
+6. Debug by checking the .dot files with different .yaml's, and once correct,
+generate the desired .png files using the provided graph.sh script.
+
+### Added tests (part 4)
+
+NOT FINISHED. Below was my initial workflow but did not have time.
+
+1. More tests in config_test.go
+
+2. Tests in scheduler_test.go
+      - Test for correct output after slight dependency addition (i.e. first
+      .yaml job list only has "ls" as dependency for "echo" while the second
+      has an additional "cd" as dependency for "echo")
+
+### Delay configuration and log flag (parts 5 & 6)
+
+Did not have enough time for these! Will come back to this after finals so
+I can wrap this project up :)
